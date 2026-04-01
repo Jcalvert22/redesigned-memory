@@ -1,4 +1,17 @@
 # redesigned-memory
+## Contributors 
+
+* [Jace Calvert](https://github.com/Jcalvert22)
+* [Carly Copley](https://github.com/carlycopley)
+* [Gunnar Schmidt](https://github.com/Gunnar-Schmidtt/)
+
+
+## App Idea
+
+## Target Users
+
+## Features
+
 
 ## Tech Stack
 * node.js
