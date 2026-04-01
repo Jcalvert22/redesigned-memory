@@ -1,9 +1,9 @@
 # redesigned-memory for CIS 486 Projects in Information Systems Spring 2026
 ## Contributors 
 
-[Jace Calvert](https://github.com/Jcalvert22)
-[Carly Copley](https://github.com/carlycopley)
-[Gunnar Schmidt](https://github.com/Gunnar-Schmidtt/)
+* [Jace Calvert](https://github.com/Jcalvert22)
+* [Carly Copley](https://github.com/carlycopley)
+* [Gunnar Schmidt](https://github.com/Gunnar-Schmidtt/)
 
 ## App Idea
 
