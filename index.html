@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Around Athlete</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>All Around Athlete</h1>
+    <button id="generate-btn">Generate Workout</button>
+    <section id="workout"></section>
+  </div>
+  <script type="module">
+    async function getExercises() {
+      const res = await fetch('exercises.json');
+      return res.json();
+    }
+    function pickRandom(arr, min, max) {
+      const count = Math.floor(Math.random() * (max - min + 1)) + min;
+      const copy = [...arr];
+      const result = [];
+      for (let i = 0; i < count && copy.length; i++) {
+        const idx = Math.floor(Math.random() * copy.length);
+        result.push(copy.splice(idx, 1)[0]);
+      }
+      return result;
+    }
+    function renderWorkout(exercises) {
+      const section = document.getElementById('workout');
+      section.innerHTML = '';
+      exercises.forEach(ex => {
+        const div = document.createElement('div');
+        div.className = 'exercise';
+        div.innerHTML = `<strong>${ex.name}</strong> <br><em>${ex.muscleGroup}</em><br>${ex.description}`;
+        section.appendChild(div);
+      });
+    }
+    document.getElementById('generate-btn').addEventListener('click', async () => {
+      const exercises = await getExercises();
+      const workout = pickRandom(exercises, 4, 6);
+      renderWorkout(workout);
+    });
+  </script>
+</body>
+</html>

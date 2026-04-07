@@ -1,24 +1,13 @@
 {
-  "name": "redesigned-memory",
+  "name": "all-around-athlete",
   "version": "1.0.0",
-  "description": "* [Jace Calvert](https://github.com/Jcalvert22)\r * [Carly Copley](https://github.com/carlycopley)\r * [Gunnar Schmidt](https://github.com/Gunnar-Schmidtt/)",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.mjs",
+    "dev": "nodemon app.mjs"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jcalvert22/redesigned-memory.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Jcalvert22/redesigned-memory/issues"
-  },
-  "homepage": "https://github.com/Jcalvert22/redesigned-memory#readme",
-  "dependencies": {
-    "express": "^5.2.1"
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
