@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Feedback — All Around Athlete</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* ── Star rating input ── */
+    .star-group {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+    .star-group input[type="radio"] { display: none; }
+    .star-group label {
+      font-size: 2rem;
+      color: #ccc;
+      cursor: pointer;
+      margin: 0;
+      font-weight: normal;
+      line-height: 1;
+    }
+    /* Highlight selected star and all stars before it */
+    .star-group input[type="radio"]:checked ~ label,
+    .star-group label:hover,
+    .star-group label:hover ~ label { color: #f5a623; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">All Around Athlete</a>
+  <div class="nav-links">
+    <a href="view-feedback.html">View Feedback</a>
+    <a href="exercises.html">Exercises</a>
+    <a href="login.html">Login</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Submit Feedback</h2>
+
+  <!-- Success state — hidden until form submits -->
+  <div id="success-card" class="card" style="display:none; text-align:center;">
+    <p style="font-size:2rem; margin-bottom:8px;">✓</p>
+    <h3>Thanks for your feedback!</h3>
+    <p style="margin:12px 0 20px; color:#555;">Your response has been recorded.</p>
+    <a href="view-feedback.html" class="btn btn-primary" style="margin-right:8px;">View All Feedback</a>
+    <button class="btn btn-secondary" onclick="showForm()">Submit Another</button>
+  </div>
+
+  <!-- Feedback form -->
+  <div id="form-card" class="card">
+    <div id="alert" class="alert alert-error" style="display:none"></div>
+
+    <form id="feedback-form" novalidate>
+
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="e.g. Alex Johnson" required>
+
+      <label>Rating</label>
+      <div class="star-group" id="star-group">
+        <!-- Rendered highest-to-lowest so CSS sibling selector works -->
+        <input type="radio" id="star5" name="rating" value="5">
+        <label for="star5" title="5 stars">★</label>
+
+        <input type="radio" id="star4" name="rating" value="4">
+        <label for="star4" title="4 stars">★</label>
+
+        <input type="radio" id="star3" name="rating" value="3">
+        <label for="star3" title="3 stars">★</label>
+
+        <input type="radio" id="star2" name="rating" value="2">
+        <label for="star2" title="2 stars">★</label>
+
+        <input type="radio" id="star1" name="rating" value="1">
+        <label for="star1" title="1 star">★</label>
+      </div>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message"
+        placeholder="Tell us what you think…" rows="4" required></textarea>
+
+      <button type="submit" class="btn btn-primary">Submit Feedback</button>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/feedback.js"></script>
+<script>
+  function showForm() {
+    document.getElementById('success-card').style.display = 'none';
+    document.getElementById('form-card').style.display    = 'block';
+    document.getElementById('feedback-form').reset();
+  }
+
+  document.getElementById('feedback-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const alertEl = document.getElementById('alert');
+    alertEl.style.display = 'none';
+
+    const name    = document.getElementById('name').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const ratingEl = document.querySelector('input[name="rating"]:checked');
+
+    if (!name) {
+      alertEl.textContent = 'Please enter your name.';
+      alertEl.style.display = 'block';
+      return;
+    }
+    if (!ratingEl) {
+      alertEl.textContent = 'Please select a star rating.';
+      alertEl.style.display = 'block';
+      return;
+    }
+    if (!message) {
+      alertEl.textContent = 'Please enter a message.';
+      alertEl.style.display = 'block';
+      return;
+    }
+
+    FeedbackDB.add({ name, rating: ratingEl.value, message });
+
+    document.getElementById('form-card').style.display    = 'none';
+    document.getElementById('success-card').style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
