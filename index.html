@@ -7,16 +7,46 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>All Around Athlete</h1>
-    <button id="generate-btn">Generate Workout</button>
-    <section id="workout"></section>
-  </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="brand">All Around Athlete</a>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a href="#" class="active">Workout Generator</a>
+        <a href="#">Nutrition</a>
+        <a href="#">Progress Tracker</a>
+        <a href="#">About</a>
+      </nav>
+      <div class="nav-search">
+        <input id="search-input" type="search" list="workout-options" placeholder="Search workouts, meals..." aria-label="Search workouts">
+        <datalist id="workout-options"></datalist>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Welcome to your strongest self</p>
+        <h1>Train smarter, fuel better, and track progress with confidence.</h1>
+        <p class="hero-description">All Around Athlete helps you design workouts, discover balanced nutrition plans, and see improvement every step of the way.</p>
+      </div>
+    </section>
+
+    <section class="workout-section">
+      <div class="container">
+        <h1>Generate Your Workout</h1>
+        <button id="generate-btn">Generate Workout</button>
+        <section id="workout"></section>
+      </div>
+    </section>
+  </main>
+
   <script type="module">
     async function getExercises() {
       const res = await fetch('exercises.json');
       return res.json();
     }
+
     function pickRandom(arr, min, max) {
       const count = Math.floor(Math.random() * (max - min + 1)) + min;
       const copy = [...arr];
@@ -27,6 +57,7 @@
       }
       return result;
     }
+
     function renderWorkout(exercises) {
       const section = document.getElementById('workout');
       section.innerHTML = '';
@@ -37,11 +68,72 @@
         section.appendChild(div);
       });
     }
+
+    const searchInput = document.getElementById('search-input');
+    let exercisesCache = [];
+
+    function normalizeValue(value) {
+      return String(value).trim().toLowerCase();
+    }
+
+    function populateSearchOptions(exercises) {
+      const options = document.getElementById('workout-options');
+      options.innerHTML = '';
+      const names = new Set();
+      exercises.forEach(exercise => {
+        names.add(exercise.name);
+      });
+      [...names].sort().forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        options.appendChild(option);
+      });
+    }
+
+    function searchExercises(query) {
+      if (!query) {
+        return [];
+      }
+      const normalized = normalizeValue(query);
+      return exercisesCache.filter(exercise => {
+        return normalizeValue(exercise.name).includes(normalized)
+            || normalizeValue(exercise.muscleGroup).includes(normalized)
+            || normalizeValue(exercise.description).includes(normalized);
+      });
+    }
+
+    async function loadExercises() {
+      exercisesCache = await getExercises();
+      populateSearchOptions(exercisesCache);
+    }
+
+    function showSearchResults(query) {
+      const results = searchExercises(query);
+      const section = document.getElementById('workout');
+      section.innerHTML = '';
+      if (!results.length) {
+        section.innerHTML = `<p class="search-empty">No workouts found for "${query}". Try another term.</p>`;
+        return;
+      }
+      renderWorkout(results);
+    }
+
+    searchInput.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        showSearchResults(searchInput.value);
+      }
+    });
+
     document.getElementById('generate-btn').addEventListener('click', async () => {
-      const exercises = await getExercises();
-      const workout = pickRandom(exercises, 4, 6);
+      if (!exercisesCache.length) {
+        await loadExercises();
+      }
+      const workout = pickRandom(exercisesCache, 4, 6);
       renderWorkout(workout);
     });
+
+    loadExercises();
   </script>
 </body>
 </html>

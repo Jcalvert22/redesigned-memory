@@ -1,48 +1,239 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: #f5f6fa;
-  min-height: 100vh;
   margin: 0;
-  font-family: system-ui, sans-serif;
+  min-height: 100vh;
+  background: #f2f2f2;
+  color: #111;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+
+.site-header {
+  background: #111;
+  color: #fff;
+  padding: 1rem 0;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1.5rem;
 }
-.container {
+
+.brand {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: 1.05rem;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 0.4rem 0;
+  position: relative;
+}
+
+.main-nav a:hover {
+  color: #fff;
+}
+
+.main-nav a.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.main-nav a.active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.2rem;
+  width: 100%;
+  height: 2px;
   background: #fff;
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border-radius: 999px;
+}
+
+.nav-search {
+  min-width: 240px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.nav-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 999px;
+  background: #1b1b1b;
+  color: #f8fafc;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.hero {
+  padding: 4rem 1.5rem 2rem;
+}
+
+.hero-copy {
+  max-width: 780px;
+  margin: 0 auto;
   text-align: center;
 }
-h1 {
-  margin-bottom: 1.5rem;
-  color: #222;
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: #ffcb47;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
-button {
-  background: #e0e4ea;
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 4vw, 3.75rem);
+  line-height: 1.02;
+}
+
+.hero-description {
+  max-width: 640px;
+  margin: 1.2rem auto 0;
+  color: #4b5563;
+  font-size: 1.05rem;
+}
+
+.workout-section {
+  padding: 2rem 1rem 4rem;
+}
+
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2.25rem 2rem;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  text-align: center;
+}
+
+.container h1 {
+  margin: 0 0 1.5rem;
+  font-size: 1.95rem;
+  color: #111;
+}
+
+button#generate-btn {
+  width: 100%;
+  max-width: 320px;
+  background: #111;
+  color: #fff;
   border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 6px;
+  border-radius: 999px;
+  padding: 0.95rem 1.4rem;
   font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  margin-bottom: 1.5rem;
-  transition: background 0.2s;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 14px 32px rgba(17, 17, 17, 0.16);
 }
-button:hover {
-  background: #d1d6de;
+
+button#generate-btn:hover {
+  background: #222;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 38px rgba(17, 17, 17, 0.2);
 }
+
 #workout {
-  margin-top: 1rem;
+  margin-top: 1.75rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   align-items: center;
 }
+
+.search-empty {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.98rem;
+}
+
 .exercise {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 1rem 1.5rem;
-  min-width: 220px;
-  max-width: 320px;
+  background: #f8fafc;
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+  padding: 1rem 1.4rem;
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+}
+
+.exercise strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 1.05rem;
+}
+
+.exercise em {
+  color: #6b7280;
+  font-style: normal;
+}
+
+@media (max-width: 860px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 1rem;
+  }
+
+  .main-nav {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding-top: 0.75rem;
+  }
+
+  .nav-search {
+    width: 100%;
+  }
+
+  .nav-search input {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    padding-top: 3rem;
+  }
+
+  .hero h1 {
+    font-size: 2.3rem;
+  }
+
+  .container {
+    padding: 1.75rem 1.5rem;
+  }
 }
