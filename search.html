@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Exercises — All Around Athlete</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+
+    /* ── Search bar ── */
+    .search-wrapper {
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .search-wrapper input[type="search"] {
+      width: 100%;
+      padding: 12px 44px 12px 16px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 0;
+      transition: border-color .15s;
+    }
+    .search-wrapper input[type="search"]:focus {
+      border-color: #222;
+      outline: none;
+    }
+    /* Hide the browser's native clear button — we provide our own */
+    .search-wrapper input[type="search"]::-webkit-search-cancel-button { display: none; }
+    .clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+      display: none; /* shown via JS when input has text */
+    }
+    .clear-btn:hover { color: #333; }
+
+    /* ── Result count ── */
+    .result-meta {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 18px;
+      min-height: 18px;
+    }
+
+    /* ── Filter pills ── */
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .pill {
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .1s, color .1s, border-color .1s;
+    }
+    .pill:hover            { background: #f0f0f0; }
+    .pill.active           { background: #222; color: #fff; border-color: #222; }
+
+    /* ── Exercise result cards ── */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .result-card {
+      background: #fff;
+      border-radius: 6px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      border-left: 4px solid #222;
+      transition: box-shadow .15s;
+    }
+    .result-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,.12); }
+    .result-card .ex-name {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .result-card .ex-group {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #fff;
+      background: #555;
+      border-radius: 3px;
+      padding: 2px 8px;
+      margin-bottom: 10px;
+    }
+    .result-card .ex-desc {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* ── Highlight ── */
+    mark {
+      background: #fff176;
+      color: inherit;
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    /* ── Empty / no-results state ── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #aaa;
+      grid-column: 1 / -1;
+    }
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 10px; }
+    .empty-state p { font-size: 15px; }
+
+    /* ── Muscle-group badge colour map ── */
+    [data-group="Chest"]      { background: #e74c3c; }
+    [data-group="Back"]       { background: #8e44ad; }
+    [data-group="Legs"]       { background: #2980b9; }
+    [data-group="Shoulders"]  { background: #16a085; }
+    [data-group="Arms"]       { background: #d35400; }
+    [data-group="Core"]       { background: #27ae60; }
+    [data-group="Glutes"]     { background: #c0392b; }
+    [data-group="Full Body"]  { background: #2c3e50; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">All Around Athlete</a>
+  <div class="nav-links">
+    <a href="exercises.html">Manage</a>
+    <a href="feedback.html">Feedback</a>
+    <a href="login.html">Login</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Search Exercises</h2>
+
+  <!-- Search input -->
+  <div class="search-wrapper">
+    <input type="search" id="search-input"
+      placeholder="Search by name, muscle group, or description…"
+      autocomplete="off" autofocus>
+    <button class="clear-btn" id="clear-btn" title="Clear search">✕</button>
+  </div>
+
+  <!-- Live result count + active query echo -->
+  <p class="result-meta" id="result-meta"></p>
+
+  <!-- Muscle-group filter pills (built dynamically from data) -->
+  <div class="pill-group" id="pill-group">
+    <button class="pill active" data-group="">All</button>
+    <!-- additional pills injected by JS -->
+  </div>
+
+  <!-- Results grid -->
+  <div class="results-grid" id="results"></div>
+</div>
+
+<script src="assets/js/db.js"></script>
+<script src="assets/js/search.js"></script>
+<script>
+  // ── State ──────────────────────────────────────────────────────────────────
+  let allExercises   = [];
+  let activeGroup    = '';   // selected muscle-group pill
+  let activeQuery    = '';   // current search-box text
+
+  // ── DOM refs ───────────────────────────────────────────────────────────────
+  const searchInput = document.getElementById('search-input');
+  const clearBtn    = document.getElementById('clear-btn');
+  const pillGroup   = document.getElementById('pill-group');
+  const resultsEl   = document.getElementById('results');
+  const metaEl      = document.getElementById('result-meta');
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+  function render() {
+    const results = Search.filter(allExercises, activeQuery, activeGroup);
+
+    // Result count / status line
+    if (!activeQuery && !activeGroup) {
+      metaEl.textContent = `${allExercises.length} exercise${allExercises.length !== 1 ? 's' : ''} total`;
+    } else {
+      const term = activeQuery ? `"${activeQuery}"` : '';
+      const grp  = activeGroup ? `in ${activeGroup}` : '';
+      metaEl.textContent =
+        `${results.length} result${results.length !== 1 ? 's' : ''} ${[term, grp].filter(Boolean).join(' ')}`;
+    }
+
+    // Empty state
+    if (results.length === 0) {
+      resultsEl.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <p>No exercises match your search.</p>
+          ${activeQuery ? `<p style="margin-top:8px; font-size:13px;">Try a different keyword or clear the filter.</p>` : ''}
+        </div>`;
+      return;
+    }
+
+    // Cards
+    resultsEl.innerHTML = results.map(ex => `
+      <div class="result-card">
+        <div class="ex-name">${Search.highlight(ex.name, activeQuery)}</div>
+        <span class="ex-group" data-group="${ex.muscleGroup}">${ex.muscleGroup}</span>
+        <p class="ex-desc">${Search.highlight(ex.description, activeQuery)}</p>
+      </div>
+    `).join('');
+  }
+
+  // ── Build filter pills from the loaded dataset ─────────────────────────────
+  function buildPills(exercises) {
+    const groups = Search.getMuscleGroups(exercises);
+    groups.forEach(group => {
+      const btn = document.createElement('button');
+      btn.className    = 'pill';
+      btn.dataset.group = group;
+      btn.textContent  = group;
+      pillGroup.appendChild(btn);
+    });
+  }
+
+  // ── Event: search input ────────────────────────────────────────────────────
+  searchInput.addEventListener('input', function () {
+    activeQuery = this.value;
+    clearBtn.style.display = activeQuery ? 'block' : 'none';
+    render();
+  });
+
+  // ── Event: clear button ────────────────────────────────────────────────────
+  clearBtn.addEventListener('click', function () {
+    searchInput.value  = '';
+    activeQuery        = '';
+    this.style.display = 'none';
+    searchInput.focus();
+    render();
+  });
+
+  // ── Event: filter pills ────────────────────────────────────────────────────
+  pillGroup.addEventListener('click', function (e) {
+    const btn = e.target.closest('.pill');
+    if (!btn) return;
+
+    // Update active pill highlight
+    pillGroup.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+
+    activeGroup = btn.dataset.group;
+    render();
+  });
+
+  // ── Init: seed data then build UI ──────────────────────────────────────────
+  DB.init().then(function () {
+    allExercises = DB.getAll();
+    buildPills(allExercises);
+    render();
+  });
+</script>
+
+</body>
+</html>
