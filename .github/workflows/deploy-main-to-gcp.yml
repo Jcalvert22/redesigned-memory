@@ -15,8 +15,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/rotary-phone
-          chmod 600 ~/.ssh/rotary-phone
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/keys/solid-key
+          chmod 600 ~/keys/solid-key
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
           chmod 644 ~/.ssh/known_hosts
 
@@ -25,10 +25,10 @@ jobs:
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          APP_DIR: /home/jacec/bug-free-rotary-phone-devops
+          APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/.ssh/rotary-phone -T "jacec@$SSH_HOST" << EOF
+          ssh -i ~/keys/solid-key -T "carly@$SSH_HOST" << EOF
             set -e
 
             echo "WHOAMI:"
