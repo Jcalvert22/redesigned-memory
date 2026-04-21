@@ -15,8 +15,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/rotary-phone
-          chmod 600 ~/.ssh/rotary-phone
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/redesigned-memory
+          chmod 600 ~/.ssh/redesigned-memory
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
           chmod 644 ~/.ssh/known_hosts
 
@@ -25,7 +25,7 @@ jobs:
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          APP_DIR: /home/jacecavert04/redesigned-memory
+          APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
           ssh -i ~/.ssh/rotary-phone -T "$SSH_USER@$SSH_HOST" << EOF
