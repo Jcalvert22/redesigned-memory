@@ -8,7 +8,7 @@ const app       = express();
 
 // ── Supabase server-side client ────────────────────────────────────────────
 // Uses the SERVICE ROLE key — never expose this to the browser.
-// Set these in your environment (or .env) on the GCP server:
+// Set on the GCP server:
 //   SUPABASE_URL=https://xxxx.supabase.co
 //   SUPABASE_SERVICE_ROLE_KEY=eyJ...
 const supabaseAdmin = createClient(
@@ -19,8 +19,8 @@ const supabaseAdmin = createClient(
 // ── Middleware ─────────────────────────────────────────────────────────────
 app.use(express.json());
 
-// Serve static files from the project root (index.html, login.html, etc.)
-app.use(express.static(join(__dirname)));
+// Serve static files from the project root (one level up from server/)
+app.use(express.static(join(__dirname, '..')));
 
 // ── API routes ─────────────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ app.use(express.static(join(__dirname)));
  * GET /auth/user
  *
  * Verifies a Supabase JWT and returns the decoded user object.
- * The client sends:  Authorization: Bearer <access_token>
+ * Client sends:  Authorization: Bearer <access_token>
  *
  * Returns:
  *   200 { user: { id, email, ... } }
@@ -41,7 +41,7 @@ app.get('/auth/user', async (req, res) => {
     return res.status(401).json({ error: 'Authorization header missing or malformed.' });
   }
 
-  const token = authHeader.slice(7); // strip "Bearer "
+  const token = authHeader.slice(7);
 
   const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
 

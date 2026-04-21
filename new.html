@@ -5,17 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Exercise — All Around Athlete</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    window.__AAA_CONFIG__ = {
+      SUPABASE_URL:      "{{SUPABASE_URL}}",
+      SUPABASE_ANON_KEY: "{{SUPABASE_ANON_KEY}}"
+    };
+  </script>
 </head>
 <body>
 
-<script src="assets/js/guard.js"></script>
+<script type="module" src="assets/js/guard.js"></script>
 
 <nav>
   <a class="nav-brand" href="index.html">All Around Athlete</a>
   <div class="nav-links">
     <span id="nav-user"></span>
     <a href="exercises.html">Manage Exercises</a>
-    <button onclick="Auth.logout()">Logout</button>
+    <button onclick="logout()">Logout</button>
   </div>
 </nav>
 
@@ -51,10 +57,10 @@
   </div>
 </div>
 
-<script src="assets/js/auth.js"></script>
 <script src="assets/js/db.js"></script>
 <script>
-  document.getElementById('nav-user').textContent = 'Hi, ' + Auth.getSession().username + ' | ';
+  document.getElementById('nav-user').textContent =
+    'Hi, ' + (sessionStorage.getItem('aa_username') || 'User') + ' | ';
 
   document.getElementById('new-form').addEventListener('submit', function (e) {
     e.preventDefault();

@@ -5,11 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Exercises — All Around Athlete</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>
+    window.__AAA_CONFIG__ = {
+      SUPABASE_URL:      "{{SUPABASE_URL}}",
+      SUPABASE_ANON_KEY: "{{SUPABASE_ANON_KEY}}"
+    };
+  </script>
 </head>
 <body>
 
-<!-- guard.js runs immediately and redirects if not logged in -->
-<script src="assets/js/guard.js"></script>
+<script type="module" src="assets/js/guard.js"></script>
 
 <nav>
   <a class="nav-brand" href="index.html">All Around Athlete</a>
@@ -17,7 +22,7 @@
     <span id="nav-user"></span>
     <a href="search.html">Search</a>
     <a href="new.html">+ Add Exercise</a>
-    <button onclick="Auth.logout()">Logout</button>
+    <button onclick="logout()">Logout</button>
   </div>
 </nav>
 
@@ -44,12 +49,11 @@
   </div>
 </div>
 
-<script src="assets/js/auth.js"></script>
 <script src="assets/js/db.js"></script>
 <script>
-  // Show logged-in username in nav
-  const session = Auth.getSession();
-  document.getElementById('nav-user').textContent = 'Hi, ' + session.username + ' | ';
+  // Show logged-in username in nav (stored by guard.js after Supabase auth)
+  const username = sessionStorage.getItem('aa_username') || 'User';
+  document.getElementById('nav-user').textContent = 'Hi, ' + username + ' | ';
 
   // Show flash message from redirect (e.g. after create/update/delete)
   const params = new URLSearchParams(window.location.search);
