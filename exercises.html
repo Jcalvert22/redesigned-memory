@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercises — All Around Athlete</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- guard.js runs immediately and redirects if not logged in -->
+<script src="assets/js/guard.js"></script>
+
+<nav>
+  <a class="nav-brand" href="index.html">All Around Athlete</a>
+  <div class="nav-links">
+    <span id="nav-user"></span>
+    <a href="search.html">Search</a>
+    <a href="new.html">+ Add Exercise</a>
+    <button onclick="Auth.logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Manage Exercises</h2>
+
+  <div id="alert" class="alert alert-success" style="display:none"></div>
+
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table id="exercise-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Muscle Group</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="exercise-body">
+        <tr><td colspan="5" style="text-align:center; padding:20px;">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/db.js"></script>
+<script>
+  // Show logged-in username in nav
+  const session = Auth.getSession();
+  document.getElementById('nav-user').textContent = 'Hi, ' + session.username + ' | ';
+
+  // Show flash message from redirect (e.g. after create/update/delete)
+  const params = new URLSearchParams(window.location.search);
+  const flash  = params.get('msg');
+  if (flash) {
+    const alertEl = document.getElementById('alert');
+    alertEl.textContent  = flash;
+    alertEl.style.display = 'block';
+  }
+
+  function renderTable() {
+    const tbody     = document.getElementById('exercise-body');
+    const exercises = DB.getAll();
+
+    if (exercises.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">No exercises yet. <a href="new.html">Add one</a>.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = exercises.map((ex, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${escHtml(ex.name)}</td>
+        <td>${escHtml(ex.muscleGroup)}</td>
+        <td>${escHtml(ex.description)}</td>
+        <td>
+          <div class="actions">
+            <a href="update.html?id=${ex.id}" class="btn btn-secondary btn-sm">Edit</a>
+            <button class="btn btn-danger btn-sm" onclick="deleteExercise('${ex.id}', '${escHtml(ex.name)}')">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function deleteExercise(id, name) {
+    if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+    DB.delete(id);
+    renderTable();
+  }
+
+  // Escape HTML to prevent XSS when rendering user-supplied data
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // Seed then render
+  DB.init().then(renderTable);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  color: #333;
+}
+
+/* ── Navigation ── */
+nav {
+  background: #222;
+  color: #fff;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+nav .nav-brand { font-weight: bold; font-size: 1.1rem; text-decoration: none; color: #fff; }
+nav .nav-links a, nav .nav-links button {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 16px;
+  font-size: 0.9rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+nav .nav-links a:hover, nav .nav-links button:hover { text-decoration: underline; }
+
+/* ── Container ── */
+.container { max-width: 860px; margin: 40px auto; padding: 0 20px; }
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 28px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  margin-bottom: 24px;
+}
+
+/* ── Typography ── */
+h2 { margin-bottom: 20px; }
+
+/* ── Forms ── */
+label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 0.9rem; }
+input, textarea, select {
+  width: 100%;
+  padding: 9px 10px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #555;
+}
+textarea { resize: vertical; min-height: 80px; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-block;
+  padding: 9px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  text-decoration: none;
+  text-align: center;
+}
+.btn-primary  { background: #222; color: #fff; }
+.btn-primary:hover  { background: #444; }
+.btn-danger   { background: #c0392b; color: #fff; }
+.btn-danger:hover   { background: #e74c3c; }
+.btn-secondary { background: #888; color: #fff; }
+.btn-secondary:hover { background: #aaa; }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+
+/* ── Alerts ── */
+.alert {
+  padding: 10px 16px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+.alert-error   { background: #fdecea; color: #c0392b; border: 1px solid #f5c6cb; }
+.alert-success { background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+
+/* ── Table ── */
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid #e5e5e5; font-size: 14px; }
+th { background: #222; color: #fff; font-weight: bold; }
+tr:hover td { background: #fafafa; }
+.actions { display: flex; gap: 6px; }
+
+/* ── Auth pages ── */
+.auth-wrapper {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+.auth-footer { margin-top: 16px; font-size: 14px; text-align: center; }

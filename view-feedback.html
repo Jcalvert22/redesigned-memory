@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Feedback — All Around Athlete</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* ── Summary bar ── */
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      background: #fff;
+      border-radius: 6px;
+      padding: 16px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.1);
+      text-align: center;
+      min-width: 120px;
+    }
+    .stat-box .stat-value { font-size: 2rem; font-weight: bold; }
+    .stat-box .stat-label { font-size: 12px; color: #777; margin-top: 4px; }
+
+    /* ── Controls row ── */
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .controls select { width: auto; margin-bottom: 0; }
+
+    /* ── Feedback cards ── */
+    .feedback-card {
+      background: #fff;
+      border-radius: 6px;
+      padding: 18px 22px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      margin-bottom: 14px;
+    }
+    .feedback-card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .feedback-card .author { font-weight: bold; font-size: 15px; }
+    .feedback-card .date   { font-size: 12px; color: #999; }
+    .feedback-card .rating { color: #f5a623; font-size: 1.2rem; letter-spacing: 1px; }
+    .feedback-card .message { color: #444; font-size: 14px; line-height: 1.6; }
+    .empty-state { text-align: center; padding: 48px 0; color: #999; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">All Around Athlete</a>
+  <div class="nav-links">
+    <a href="search.html">Search</a>
+    <a href="feedback.html">Leave Feedback</a>
+    <a href="exercises.html">Exercises</a>
+    <a href="login.html">Login</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Community Feedback</h2>
+
+  <!-- Summary stats -->
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="stat-value" id="stat-count">0</div>
+      <div class="stat-label">Total Reviews</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-avg">—</div>
+      <div class="stat-label">Avg. Rating</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-stars" style="color:#f5a623; font-size:1.4rem;">—</div>
+      <div class="stat-label">Out of 5 ★</div>
+    </div>
+  </div>
+
+  <!-- Sort + filter controls -->
+  <div class="controls">
+    <label for="sort-by" style="margin:0; font-weight:bold;">Sort:</label>
+    <select id="sort-by">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="highest">Highest Rating</option>
+      <option value="lowest">Lowest Rating</option>
+    </select>
+
+    <label for="filter-rating" style="margin:0; font-weight:bold;">Filter by rating:</label>
+    <select id="filter-rating">
+      <option value="0">All ratings</option>
+      <option value="5">★★★★★ (5)</option>
+      <option value="4">★★★★☆ (4)</option>
+      <option value="3">★★★☆☆ (3)</option>
+      <option value="2">★★☆☆☆ (2)</option>
+      <option value="1">★☆☆☆☆ (1)</option>
+    </select>
+
+    <a href="feedback.html" class="btn btn-primary btn-sm">+ Add Feedback</a>
+  </div>
+
+  <!-- Feedback list -->
+  <div id="feedback-list"></div>
+</div>
+
+<script src="assets/js/feedback.js"></script>
+<script>
+  function render() {
+    const sortBy   = document.getElementById('sort-by').value;
+    const filterBy = document.getElementById('filter-rating').value;
+
+    const sorted   = FeedbackDB.getSorted(sortBy);
+    const entries  = FeedbackDB.filterByRating(filterBy, sorted);
+    const all      = FeedbackDB.getAll();
+    const list     = document.getElementById('feedback-list');
+
+    // Update stats (always based on all entries, not filtered)
+    document.getElementById('stat-count').textContent = all.length;
+    const avg = FeedbackDB.getAverageRating();
+    document.getElementById('stat-avg').textContent   = all.length ? avg : '—';
+    document.getElementById('stat-stars').textContent = all.length ? stars(Math.round(avg)) : '—';
+
+    if (entries.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <p style="font-size:2rem; margin-bottom:8px;">💬</p>
+          <p>No feedback found. <a href="feedback.html">Be the first to leave a review!</a></p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = entries.map(entry => `
+      <div class="feedback-card">
+        <div class="card-header">
+          <span class="author">${escHtml(entry.name)}</span>
+          <span class="date">${formatDate(entry.timestamp)}</span>
+        </div>
+        <div class="rating">${stars(entry.rating)}</div>
+        <p class="message">${escHtml(entry.message)}</p>
+      </div>
+    `).join('');
+  }
+
+  // Re-render whenever sort or filter changes
+  document.getElementById('sort-by').addEventListener('change', render);
+  document.getElementById('filter-rating').addEventListener('change', render);
+
+  render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Exercise — All Around Athlete</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<script src="assets/js/guard.js"></script>
+
+<nav>
+  <a class="nav-brand" href="index.html">All Around Athlete</a>
+  <div class="nav-links">
+    <span id="nav-user"></span>
+    <a href="exercises.html">Manage Exercises</a>
+    <button onclick="Auth.logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Add Exercise</h2>
+
+  <div class="card">
+    <div id="alert" class="alert alert-error" style="display:none"></div>
+
+    <form id="new-form">
+      <label for="name">Exercise Name</label>
+      <input type="text" id="name" name="name" placeholder="e.g. Push-Up" required autofocus>
+
+      <label for="muscleGroup">Muscle Group</label>
+      <select id="muscleGroup" name="muscleGroup" required>
+        <option value="">— Select —</option>
+        <option>Chest</option>
+        <option>Back</option>
+        <option>Legs</option>
+        <option>Shoulders</option>
+        <option>Arms</option>
+        <option>Core</option>
+        <option>Glutes</option>
+        <option>Full Body</option>
+      </select>
+
+      <label for="description">Description</label>
+      <textarea id="description" name="description" placeholder="Brief description of the exercise…" required></textarea>
+
+      <button type="submit" class="btn btn-primary">Save Exercise</button>
+      <a href="exercises.html" class="btn btn-secondary" style="margin-left:8px;">Cancel</a>
+    </form>
+  </div>
+</div>
+
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/db.js"></script>
+<script>
+  document.getElementById('nav-user').textContent = 'Hi, ' + Auth.getSession().username + ' | ';
+
+  document.getElementById('new-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name        = document.getElementById('name').value.trim();
+    const muscleGroup = document.getElementById('muscleGroup').value;
+    const description = document.getElementById('description').value.trim();
+
+    if (!name || !muscleGroup || !description) {
+      const alertEl = document.getElementById('alert');
+      alertEl.textContent  = 'All fields are required.';
+      alertEl.style.display = 'block';
+      return;
+    }
+
+    DB.create({ name, muscleGroup, description });
+    window.location.href = 'exercises.html?msg=' + encodeURIComponent('Exercise added successfully.');
+  });
+</script>
+
+</body>
+</html>

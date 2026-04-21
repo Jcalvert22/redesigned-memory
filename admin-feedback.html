@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Feedback — All Around Athlete</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      background: #fff;
+      border-radius: 6px;
+      padding: 14px 22px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.1);
+      text-align: center;
+      min-width: 110px;
+    }
+    .stat-box .stat-value { font-size: 1.8rem; font-weight: bold; }
+    .stat-box .stat-label { font-size: 11px; color: #777; margin-top: 2px; }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .controls select { width: auto; margin-bottom: 0; }
+
+    /* Rating breakdown bar */
+    .breakdown { margin-bottom: 24px; }
+    .breakdown-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .breakdown-row .bar-track {
+      flex: 1;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .breakdown-row .bar-fill {
+      height: 100%;
+      background: #f5a623;
+      border-radius: 5px;
+      transition: width 0.3s;
+    }
+    .breakdown-row .bar-count { min-width: 24px; text-align: right; color: #666; }
+
+    /* Table */
+    td .message-cell { max-width: 280px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rating-cell { color: #f5a623; letter-spacing: 1px; white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+<script src="assets/js/guard.js"></script>
+
+<nav>
+  <a class="nav-brand" href="index.html">All Around Athlete</a>
+  <div class="nav-links">
+    <span id="nav-user"></span>
+    <a href="feedback.html">Submit Feedback</a>
+    <a href="view-feedback.html">Public View</a>
+    <button onclick="Auth.logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Manage Feedback</h2>
+
+  <div id="flash" class="alert alert-success" style="display:none"></div>
+
+  <!-- Summary stats -->
+  <div class="stats-bar">
+    <div class="stat-box">
+      <div class="stat-value" id="stat-count">0</div>
+      <div class="stat-label">Total Entries</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-avg">—</div>
+      <div class="stat-label">Avg. Rating</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value" id="stat-five">0</div>
+      <div class="stat-label">5-Star Reviews</div>
+    </div>
+  </div>
+
+  <!-- Rating breakdown -->
+  <div class="card breakdown" id="breakdown-section">
+    <strong style="display:block; margin-bottom:12px;">Rating Breakdown</strong>
+    <div id="breakdown-bars"></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <label for="sort-by" style="margin:0; font-weight:bold;">Sort:</label>
+    <select id="sort-by">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="highest">Highest Rating</option>
+      <option value="lowest">Lowest Rating</option>
+    </select>
+
+    <label for="filter-rating" style="margin:0; font-weight:bold;">Filter:</label>
+    <select id="filter-rating">
+      <option value="0">All ratings</option>
+      <option value="5">★★★★★ (5)</option>
+      <option value="4">★★★★☆ (4)</option>
+      <option value="3">★★★☆☆ (3)</option>
+      <option value="2">★★☆☆☆ (2)</option>
+      <option value="1">★☆☆☆☆ (1)</option>
+    </select>
+
+    <button class="btn btn-danger btn-sm" onclick="confirmClearAll()">Clear All</button>
+  </div>
+
+  <!-- Feedback table -->
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table id="feedback-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Message</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="feedback-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/feedback.js"></script>
+<script>
+  document.getElementById('nav-user').textContent = 'Hi, ' + Auth.getSession().username + ' | ';
+
+  function renderBreakdown() {
+    const all   = FeedbackDB.getAll();
+    const total = all.length;
+    const barsEl = document.getElementById('breakdown-bars');
+
+    if (!total) {
+      barsEl.innerHTML = '<p style="color:#999; font-size:13px;">No feedback yet.</p>';
+      return;
+    }
+
+    barsEl.innerHTML = [5, 4, 3, 2, 1].map(r => {
+      const count = all.filter(e => e.rating === r).length;
+      const pct   = total ? Math.round((count / total) * 100) : 0;
+      return `
+        <div class="breakdown-row">
+          <span style="min-width:70px; color:#f5a623;">${'★'.repeat(r)}${'☆'.repeat(5 - r)}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+          <span class="bar-count">${count}</span>
+        </div>`;
+    }).join('');
+  }
+
+  function renderStats() {
+    const all = FeedbackDB.getAll();
+    document.getElementById('stat-count').textContent = all.length;
+    document.getElementById('stat-avg').textContent   = all.length ? FeedbackDB.getAverageRating() : '—';
+    document.getElementById('stat-five').textContent  = all.filter(e => e.rating === 5).length;
+  }
+
+  function renderTable() {
+    const sortBy   = document.getElementById('sort-by').value;
+    const filterBy = document.getElementById('filter-rating').value;
+    const sorted   = FeedbackDB.getSorted(sortBy);
+    const entries  = FeedbackDB.filterByRating(filterBy, sorted);
+    const tbody    = document.getElementById('feedback-body');
+
+    if (entries.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#999;">No entries found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = entries.map((entry, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${escHtml(entry.name)}</td>
+        <td class="rating-cell">${stars(entry.rating)}</td>
+        <td><span class="message-cell" title="${escHtml(entry.message)}">${escHtml(entry.message)}</span></td>
+        <td style="white-space:nowrap; font-size:12px; color:#666;">${formatDate(entry.timestamp)}</td>
+        <td>
+          <button class="btn btn-danger btn-sm"
+            onclick="deleteEntry('${entry.id}', '${escHtml(entry.name)}')">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function render() {
+    renderStats();
+    renderBreakdown();
+    renderTable();
+  }
+
+  function deleteEntry(id, name) {
+    if (!confirm('Delete feedback from "' + name + '"?')) return;
+    FeedbackDB.delete(id);
+    showFlash('Entry deleted.');
+    render();
+  }
+
+  function confirmClearAll() {
+    const count = FeedbackDB.getAll().length;
+    if (!count) { showFlash('Nothing to clear.'); return; }
+    if (!confirm('Delete ALL ' + count + ' feedback entries? This cannot be undone.')) return;
+    FeedbackDB.clearAll();
+    showFlash('All feedback cleared.');
+    render();
+  }
+
+  function showFlash(msg) {
+    const el = document.getElementById('flash');
+    el.textContent  = msg;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 3000);
+  }
+
+  document.getElementById('sort-by').addEventListener('change', renderTable);
+  document.getElementById('filter-rating').addEventListener('change', renderTable);
+
+  render();
+</script>
+
+</body>
+</html>
