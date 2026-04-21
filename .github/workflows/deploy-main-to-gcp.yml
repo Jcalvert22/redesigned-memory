@@ -15,8 +15,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/redesigned-memory
-          chmod 600 ~/.ssh/redesigned-memory
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/rotary-phone
+          chmod 600 ~/.ssh/rotary-phone
           printf 'Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
           chmod 600 ~/.ssh/config
       - name: Debug SSH key
@@ -24,16 +24,16 @@ jobs:
          echo "Listing ~/.ssh:"
          ls -la ~/.ssh
          echo "Key file size:"
-         wc -c ~/.ssh/redesigned-memory || echo "Key file missing"
+         wc -c ~/.ssh/rotary-phone || echo "Key file missing"
       - name: Deploy over SSH
         shell: bash
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          APP_DIR: /home/jacecalvert04/redesigned-memory
+          APP_DIR: /home/jacecalvert04/rotary-phone
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/.ssh/redesigned-memory \
+          ssh -i ~/.ssh/rotary-phone \
             -o BatchMode=yes \
             -o ConnectTimeout=30 \
             "$SSH_USER@$SSH_HOST" 'bash -s' << EOF
