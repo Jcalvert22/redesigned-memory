@@ -20,6 +20,14 @@ jobs:
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
           chmod 644 ~/.ssh/known_hosts
 
+      - name: Debug SSH key
+        run: |
+         echo "Listing ~/.ssh:"
+         ls -la ~/.ssh
+         echo "Key file size:"
+         wc -c ~/.ssh/rotary-phone || echo "Key file missing"
+
+
       - name: Deploy over SSH
         shell: bash
         env:
