@@ -15,8 +15,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/keys/solid-key
-          chmod 600 ~/keys/solid-key
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/rotary-phone
+          chmod 600 ~/.ssh/rotary-phone
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
           chmod 644 ~/.ssh/known_hosts
 
@@ -28,7 +28,7 @@ jobs:
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/keys/solid-key -T "carly@$SSH_HOST" << EOF
+          ssh -i ~/keys/solid-key -T "SSH_USER@$SSH_HOST" << EOF
             set -e
 
             echo "WHOAMI:"
