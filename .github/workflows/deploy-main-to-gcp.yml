@@ -35,7 +35,7 @@ jobs:
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/.ssh/aaa-deploy-key -T "$SSH_USER@$SSH_HOST" << EOF
+          ssh -i ~/.ssh/redesigned-memory -T "$SSH_USER@$SSH_HOST" << EOF
             set -e
 
             echo "WHOAMI:"
