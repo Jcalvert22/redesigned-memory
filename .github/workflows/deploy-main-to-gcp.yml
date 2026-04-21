@@ -25,7 +25,7 @@ jobs:
          echo "Listing ~/.ssh:"
          ls -la ~/.ssh
          echo "Key file size:"
-         wc -c ~/.ssh/rotary-phone || echo "Key file missing"
+         wc -c ~/.ssh/redesigned-memory || echo "Key file missing"
 
 
       - name: Deploy over SSH
@@ -36,7 +36,7 @@ jobs:
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/.ssh/rotary-phone -T "$jacec@$SSH_HOST" << EOF
+          ssh -i ~/.ssh/redesigned-memory -T "$jacec@$SSH_HOST" << EOF
             set -e
 
             echo "WHOAMI:"
