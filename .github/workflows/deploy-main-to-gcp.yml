@@ -15,18 +15,16 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/aaa-deploy-key
-          chmod 600 ~/.ssh/aaa-deploy-key
-          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/redesigned-memory
+          chmod 600 ~/.ssh/redesigned-memory
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
           chmod 644 ~/.ssh/known_hosts
-
       - name: Debug SSH key
         run: |
-          echo "Listing ~/.ssh:"
-          ls -la ~/.ssh
-          echo "Key file size:"
-          wc -c ~/.ssh/aaa-deploy-key || echo "Key file missing"
-
+         echo "Listing ~/.ssh:"
+         ls -la ~/.ssh
+         echo "Key file size:"
+         wc -c ~/.ssh/redesigned-memory || echo "Key file missing"
       - name: Deploy over SSH
         shell: bash
         env:
@@ -37,31 +35,22 @@ jobs:
         run: |
           ssh -i ~/.ssh/redesigned-memory -T "$SSH_USER@$SSH_HOST" << EOF
             set -e
-
             echo "WHOAMI:"
             whoami
-
             echo "HOME DIR:"
             echo $HOME
-
             echo "APP_DIR VALUE:"
             echo "$APP_DIR"
-
             echo "PWD BEFORE CD:"
             pwd
-
             echo "TRYING TO CD INTO APP_DIR:"
-            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1;}
-
+            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1;}      
             echo "PWD AFTER CD:"
             pwd
-
             echo "LISTING DIRECTORY CONTENTS:"
             ls -la
-
             git pull
             npm ci
-
             pm2 delete "$PM2_NAME" || true
             pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
