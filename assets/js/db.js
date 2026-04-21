@@ -7,13 +7,40 @@ const DB = {
 
   // Call this once on any CRUD page before reading data
   async init() {
-    if (localStorage.getItem(this._key) !== null) return; // already seeded
-
     try {
-      const res  = await fetch('exercises.json');
-      const data = await res.json();
+      const res  = await fetch('https://raw.githubusercontent.com/Jcalvert22/congenial-train-app-server/main/public/data/exercises.json');
+      let data = await res.json();
+      console.log('Raw GitHub data:', data);
+      
+      // Extract exercises from the nested structure and flatten
+      if (data.exercises && typeof data.exercises === 'object') {
+        const flatExercises = [];
+        for (const muscleGroup in data.exercises) {
+          const exercises = data.exercises[muscleGroup];
+          if (Array.isArray(exercises)) {
+            exercises.forEach((ex, index) => {
+              // Map GitHub properties to our expected format
+              flatExercises.push({
+                id: index,
+                name: ex.name,
+                muscleGroup: ex.primary_muscle,
+                description: ex.description
+              });
+            });
+          }
+        }
+        data = flatExercises;
+      }
+      
+      console.log('Processed data to store:', data);
+      
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('Could not parse exercises data');
+      }
+      
       localStorage.setItem(this._key, JSON.stringify(data));
-    } catch {
+    } catch (error) {
+      console.error('Failed to fetch exercises from GitHub:', error);
       // Fallback: inline seed (works when opened directly as a file)
       const seed = [
         { id: 1, name: 'Bodyweight Squat',  muscleGroup: 'Legs',   description: 'A simple squat using only bodyweight.' },
@@ -22,12 +49,15 @@ const DB = {
         { id: 4, name: 'Dead Bug',           muscleGroup: 'Core',   description: 'Opposite arm/leg extension while stabilizing core.' },
         { id: 5, name: 'Reverse Lunge',      muscleGroup: 'Legs',   description: 'Step backward into a lunge, alternating legs.' }
       ];
+      console.log('Using fallback seed data');
       localStorage.setItem(this._key, JSON.stringify(seed));
     }
   },
 
   getAll() {
-    return JSON.parse(localStorage.getItem(this._key) || '[]');
+    const data = JSON.parse(localStorage.getItem(this._key) || '[]');
+    console.log('getAll() returning:', data);
+    return data;
   },
 
   getById(id) {

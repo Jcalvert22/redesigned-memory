@@ -51,7 +51,7 @@
   </main>
   <script type="module">
     async function getExercises() {
-      const res = await fetch('exercises.json');
+      const res = await fetch('https://raw.githubusercontent.com/Jcalvert22/congenial-train-app-server/main/public/data/exercises.json');
       return res.json();
     }
 
