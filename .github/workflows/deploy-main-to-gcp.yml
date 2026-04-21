@@ -28,7 +28,7 @@ jobs:
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/keys/solid-key -T "SSH_USER@$SSH_HOST" << EOF
+          ssh -i ~/keys/solid-key -T "$SSH_USER@$SSH_HOST" << EOF
             set -e
 
             echo "WHOAMI:"
