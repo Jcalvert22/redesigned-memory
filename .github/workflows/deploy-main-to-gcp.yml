@@ -28,7 +28,7 @@ jobs:
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/.ssh/rotary-phone -T "$SSH_USER@$SSH_HOST" << EOF
+          ssh -i ~/.ssh/rotary-phone -T "$jacec@$SSH_HOST" << EOF
             set -e
 
             echo "WHOAMI:"
