@@ -17,8 +17,8 @@ jobs:
           chmod 700 ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/redesigned-memory
           chmod 600 ~/.ssh/redesigned-memory
-          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
-          chmod 644 ~/.ssh/known_hosts
+          printf 'Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
+          chmod 600 ~/.ssh/config
       - name: Debug SSH key
         run: |
          echo "Listing ~/.ssh:"
