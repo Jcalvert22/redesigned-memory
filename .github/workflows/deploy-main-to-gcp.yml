@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Prepare SSH
         shell: bash
         env:
@@ -54,4 +57,5 @@ jobs:
             pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
           EOF
+
 
