@@ -164,7 +164,7 @@ logger.info({ port: PORT }, 'Server started');
 | 6 | `PORT` not validated | 🟢 Low |
 | 7 | Unstructured logging | 🔵 Info |
 
-The two high-severity issues should be resolved before commercial deployment. The remaining items represent good engineering practice and are worth addressing before the codebase grows. For the current expectations of our app's criteria, we have decided not to address these issues.
+The two high-severity issues should be resolved before commercial deployment. However, for the current expectations of our app's criteria, we have decided not to address these issues. app.mjs meets all of our required expectations. 
 
 
 # Code Review — `app.mjs` Written by Claude AI
