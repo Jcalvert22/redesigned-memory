@@ -39,14 +39,14 @@ wc -c ~/.ssh/aaa-deploy-key
 ```
 * Prevents the workflow from crashing at this step
 * Provides a clear, human-readable error message instead
-### CI/CD Issues This Uncovers:
+## CI/CD Issues This Uncovers:
 * Secret not injected
 * Wrong file path
 * Key improperly written (newline issues)
 * Permissions incorrecct
 * Overwritten or truncated key 
 
-### Limitations:
+## Limitations:
 * Does not validate key format (e.g., corrupted PEM structure)
 * Does not test SSH connectivity
 * Does not confirm correct permissions (beyond visibility)
