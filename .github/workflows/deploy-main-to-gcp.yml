@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/aaa-deploy-key
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/aaa-deploy-key
           chmod 600 ~/.ssh/aaa-deploy-key
           ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
@@ -27,6 +27,12 @@ jobs:
          ls -la ~/.ssh
          echo "Key file size:"
          wc -c ~/.ssh/aaa-deploy-key || echo "Key file missing"
+         echo "Key line count:"
+         wc -l ~/.ssh/aaa-deploy-key
+         echo "Key first line:"
+         head -1 ~/.ssh/aaa-deploy-key
+         echo "Key last line:"
+         tail -1 ~/.ssh/aaa-deploy-key
       - name: Deploy over SSH
         shell: bash
         env:
