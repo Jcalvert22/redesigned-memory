@@ -33,7 +33,7 @@ app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`)
 
 ## Overview
 
-This is a minimal Express server that exposes a configuration endpoint and serves static files. The code is concise and readable, and the use of environment variables for sensitive config values is the correct approach. That said, I identified several security and reliability concerns that should be addressed before this is deployed to a production environment.
+This is a minimal Express server that exposes a configuration endpoint and serves static files. The code is concise and readable, and the use of environment variables for sensitive config values is the correct approach. However, I identified several security and reliability concerns that would be a concern if this app were to be deployed for commercial use. 
 
 ---
 
@@ -164,7 +164,7 @@ logger.info({ port: PORT }, 'Server started');
 | 6 | `PORT` not validated | 🟢 Low |
 | 7 | Unstructured logging | 🔵 Info |
 
-The two high-severity issues should be resolved before deployment. The remaining items represent good engineering practice and are worth addressing before the codebase grows.
+The two high-severity issues should be resolved before commercial deployment. The remaining items represent good engineering practice and are worth addressing before the codebase grows. For the current expectations of our app's criteria, we have decided not to address these issues.
 
 
 # Code Review — `app.mjs` Written by Claude AI
