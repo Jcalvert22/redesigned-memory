@@ -63,4 +63,4 @@ jobs:
 ```
 
 # Initial Problem
-This file only successfully deployed an estimated 8% of the time. 
+This file only successfully deployed a calculated 8% of total commits. 
