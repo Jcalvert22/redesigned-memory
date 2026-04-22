@@ -24,6 +24,148 @@ app.use(express.static(join(__dirname)));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
 ```
+# Code Review — `server.js`
+
+**Reviewer:** Carly Copley · CIS 486 – Projects in Information Systems 
+**Date:** April 22, 2026
+
+---
+
+## Overview
+
+This is a minimal Express server that exposes a configuration endpoint and serves static files. The code is concise and readable, and the use of environment variables for sensitive config values is the correct approach. That said, I identified several security and reliability concerns that should be addressed before this is deployed to a production environment.
+
+---
+
+## Positive Observations
+
+- Correctly uses ES module syntax (`import`/`export`) rather than CommonJS — consistent with modern Node.js best practices.
+- Environment variables are used for `SUPABASE_URL` and `SUPABASE_ANON_KEY` rather than hardcoded values.
+- The `/api/config` route includes a guard clause that returns a `503` if the required environment variables are missing, which is good defensive programming.
+- The code is short, readable, and avoids unnecessary complexity.
+
+---
+
+## Issues
+
+### 1. `express.static` is pointed at the project root — HIGH
+
+```js
+// Current
+app.use(express.static(join(__dirname)));
+```
+
+This serves the entire directory that `server.js` lives in, which likely includes the server file itself, `node_modules/`, `.env`, and any other sensitive files in the project root. An attacker can retrieve these with a simple GET request.
+
+The fix is to serve only a dedicated public directory:
+
+```js
+// Recommended
+app.use(express.static(join(__dirname, 'public')));
+```
+
+All browser-facing assets (HTML, CSS, JS bundles) should be moved into a `public/` folder.
+
+---
+
+### 2. No CORS policy on `/api/config` — HIGH
+
+There is no CORS configuration on the `/api/config` endpoint, meaning any origin can make a cross-origin request to it and retrieve the Supabase credentials. The `cors` npm package makes this straightforward to fix:
+
+```js
+import cors from 'cors';
+
+app.use('/api/config', cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') ?? []
+}));
+```
+
+`ALLOWED_ORIGINS` should be set to the production domain(s) in the deployment environment.
+
+---
+
+### 3. No rate limiting — MEDIUM
+
+The `/api/config` endpoint has no rate limiting, making it trivial to scrape or abuse in a loop. The `express-rate-limit` package handles this with minimal setup:
+
+```js
+import rateLimit from 'express-rate-limit';
+
+const limiter = rateLimit({ windowMs: 60_000, max: 30 });
+app.get('/api/config', limiter, (req, res) => { ... });
+```
+
+---
+
+### 4. No HTTP security headers — MEDIUM
+
+The server does not set any security-relevant HTTP headers such as `Content-Security-Policy`, `X-Frame-Options`, or `X-Content-Type-Options`. The `helmet` middleware sets these automatically and is considered standard practice for Express applications:
+
+```js
+import helmet from 'helmet';
+
+app.use(helmet());
+```
+
+---
+
+### 5. No graceful shutdown — LOW
+
+The process does not handle `SIGTERM`, so any in-flight requests are dropped when the server is stopped (e.g. during a container restart or deployment). The fix is to capture the server instance and close it cleanly:
+
+```js
+const server = app.listen(PORT, () =>
+  console.log(`Server running at http://localhost:${PORT}`)
+);
+
+process.on('SIGTERM', () => {
+  server.close(() => process.exit(0));
+});
+```
+
+---
+
+### 6. `PORT` is not validated — LOW
+
+`process.env.PORT` is passed directly to `app.listen()` without parsing or validation. A non-numeric value will produce a confusing runtime error. The port should be parsed and validated at startup:
+
+```js
+const PORT = parseInt(process.env.PORT ?? '3000', 10);
+if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
+  console.error('Fatal: PORT environment variable is invalid');
+  process.exit(1);
+}
+```
+
+---
+
+### 7. Structured logging — INFO
+
+`console.log` is sufficient for development but is not suitable for production. Structured loggers like `pino` output JSON with timestamps and log levels, which integrates properly with log aggregation tools:
+
+```js
+import pino from 'pino';
+const logger = pino();
+
+logger.info({ port: PORT }, 'Server started');
+```
+
+---
+
+## Summary
+
+| # | Issue | Severity |
+|---|-------|----------|
+| 1 | `express.static` serving project root | 🔴 High |
+| 2 | No CORS policy on `/api/config` | 🔴 High |
+| 3 | No rate limiting | 🟡 Medium |
+| 4 | No HTTP security headers | 🟡 Medium |
+| 5 | No graceful shutdown | 🟢 Low |
+| 6 | `PORT` not validated | 🟢 Low |
+| 7 | Unstructured logging | 🔵 Info |
+
+The two high-severity issues should be resolved before deployment. The remaining items represent good engineering practice and are worth addressing before the codebase grows.
+
 
 # Code Review — `app.mjs` Written by Claude AI
 
