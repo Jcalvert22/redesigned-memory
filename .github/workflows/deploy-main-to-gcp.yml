@@ -17,22 +17,24 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}"  > ~/.ssh/id_ed25519
+          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
+
       - name: Debug SSH key
         run: |
-         echo "Listing ~/.ssh:"
-         ls -la ~/.ssh
-         echo "Key file size:"
-         wc -c ~/.ssh/id_ed25519 || echo "Key file missing"
-         echo "Key line count:"
-         wc -l ~/.ssh/id_ed25519
-         echo "Key first line:"
-         head -1 ~/.ssh/id_ed25519
-         echo "Key last line:"
-         tail -1 ~/.ssh/id_ed25519
+          echo "Listing ~/.ssh:"
+          ls -la ~/.ssh
+          echo "Key file size:"
+          wc -c ~/.ssh/id_ed25519 || echo "Key file missing"
+          echo "Key line count:"
+          wc -l ~/.ssh/id_ed25519
+          echo "Key first line:"
+          head -1 ~/.ssh/id_ed25519
+          echo "Key last line:"
+          tail -1 ~/.ssh/id_ed25519
+
       - name: Deploy over SSH
         shell: bash
         env:
@@ -45,23 +47,11 @@ jobs:
             -o ConnectTimeout=30 \
             "jacecalvert04@$SSH_HOST" 'bash -s' << EOF
             set -e
-            echo "WHOAMI:"
-            whoami
-            echo "HOME DIR:"
-            echo $HOME
-            echo "APP_DIR VALUE:"
-            echo "$APP_DIR"
-            echo "PWD BEFORE CD:"
-            pwd
-            echo "TRYING TO CD INTO APP_DIR:"
-            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1;}      
-            echo "PWD AFTER CD:"
-            pwd
-            echo "LISTING DIRECTORY CONTENTS:"
-            ls -la
+            cd "$APP_DIR"
             git pull
             npm ci
             pm2 delete "$PM2_NAME" || true
             pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
           EOF
+
