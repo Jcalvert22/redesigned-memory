@@ -12,15 +12,11 @@
       <a href="#" class="brand">All Around Athlete</a>
       <nav class="main-nav" aria-label="Primary navigation">
         <a href="#" class="active">Workout Generator</a>
-        <a href="search.html">Search</a>
         <a href="exercises.html">Manage Exercises</a>
+        <a href="search.html">Search</a>
         <a href="feedback.html">Feedback</a>
         <a href="login.html">Login / Register</a>
       </nav>
-      <div class="nav-search">
-        <input id="search-input" type="search" list="workout-options" placeholder="Search workouts, meals..." aria-label="Search workouts">
-        <datalist id="workout-options"></datalist>
-      </div>
     </div>
   </header>
 
@@ -69,71 +65,11 @@
       });
     }
 
-    const searchInput = document.getElementById('search-input');
-    let exercisesCache = [];
-
-    function normalizeValue(value) {
-      return String(value).trim().toLowerCase();
-    }
-
-    function populateSearchOptions(exercises) {
-      const options = document.getElementById('workout-options');
-      options.innerHTML = '';
-      const names = new Set();
-      exercises.forEach(exercise => {
-        names.add(exercise.name);
-      });
-      [...names].sort().forEach(name => {
-        const option = document.createElement('option');
-        option.value = name;
-        options.appendChild(option);
-      });
-    }
-
-    function searchExercises(query) {
-      if (!query) {
-        return [];
-      }
-      const normalized = normalizeValue(query);
-      return exercisesCache.filter(exercise => {
-        return normalizeValue(exercise.name).includes(normalized)
-            || normalizeValue(exercise.muscleGroup).includes(normalized)
-            || normalizeValue(exercise.description).includes(normalized);
-      });
-    }
-
-    async function loadExercises() {
-      exercisesCache = await getExercises();
-      populateSearchOptions(exercisesCache);
-    }
-
-    function showSearchResults(query) {
-      const results = searchExercises(query);
-      const section = document.getElementById('workout');
-      section.innerHTML = '';
-      if (!results.length) {
-        section.innerHTML = `<p class="search-empty">No workouts found for "${query}". Try another term.</p>`;
-        return;
-      }
-      renderWorkout(results);
-    }
-
-    searchInput.addEventListener('keydown', event => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        showSearchResults(searchInput.value);
-      }
-    });
-
     document.getElementById('generate-btn').addEventListener('click', async () => {
-      if (!exercisesCache.length) {
-        await loadExercises();
-      }
-      const workout = pickRandom(exercisesCache, 4, 6);
+      const exercises = await getExercises();
+      const workout = pickRandom(exercises, 4, 6);
       renderWorkout(workout);
     });
-
-    loadExercises();
   </script>
 </body>
 </html>
