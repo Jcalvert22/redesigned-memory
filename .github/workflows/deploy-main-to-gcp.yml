@@ -10,53 +10,51 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Prepare SSH
         shell: bash
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > "$HOME/.ssh/id_ed25519"
-          chmod 600 "$HOME/.ssh/id_ed25519"
-          ssh-keyscan -H "$SSH_HOST" >> "$HOME/.ssh/known_hosts"
-          chmod 644 "$HOME/.ssh/known_hosts"
-
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/aaa-deploy-key
+          chmod 600 ~/.ssh/aaa-deploy-key
+          printf 'Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
+          chmod 600 ~/.ssh/config
       - name: Debug SSH key
-        shell: bash
         run: |
-          echo "Listing $HOME/.ssh:"
-          ls -la "$HOME/.ssh"
-          echo "Key file size:"
-          wc -c "$HOME/.ssh/id_ed25519" || echo "Key file missing"
-          echo "Key line count:"
-          wc -l "$HOME/.ssh/id_ed25519"
-          echo "Key first line:"
-          head -1 "$HOME/.ssh/id_ed25519"
-          echo "Key last line:"
-          tail -1 "$HOME/.ssh/id_ed25519"
-
+         echo "Listing ~/.ssh:"
+         ls -la ~/.ssh
+         echo "Key file size:"
+         wc -c ~/.ssh/aaa-deploy-key || echo "Key file missing"
       - name: Deploy over SSH
         shell: bash
         env:
+          SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i "$HOME/.ssh/id_ed25519" \
+          ssh -i ~/.ssh/aaa-deploy-key \
             -o BatchMode=yes \
             -o ConnectTimeout=30 \
-            "jacecalvert04@$SSH_HOST" 'bash -s' << 'EOF'
+            "$SSH_USER@$SSH_HOST" 'bash -s' << EOF
             set -e
-            cd "$APP_DIR"
+            echo "WHOAMI:"
+            whoami
+            echo "HOME DIR:"
+            echo $HOME
+            echo "APP_DIR VALUE:"
+            echo "$APP_DIR"
+            echo "PWD BEFORE CD:"
+            pwd
+            echo "TRYING TO CD INTO APP_DIR:"
+            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1;}      
+            echo "PWD AFTER CD:"
+            pwd
+            echo "LISTING DIRECTORY CONTENTS:"
+            ls -la
             git pull
             npm ci
             pm2 delete "$PM2_NAME" || true
             pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
           EOF
-
-
