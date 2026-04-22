@@ -1,66 +1,52 @@
-# Original deploy-main-to-gcp.yml
+# File Name: deploy-main-to-gcp.yml
 ```
-name: deploy-main-to-gcp.yml
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Prepare SSH
-        shell: bash
+ - name: Debug SSH key
         run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/rotary-phone
-          chmod 600 ~/.ssh/rotary-phone
-          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: Deploy over SSH
-        shell: bash
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          APP_DIR: /home/jacec/bug-free-rotary-phone-devops
-          PM2_NAME: ${{ vars.PM2_NAME }}
-        run: |
-          ssh -i ~/.ssh/rotary-phone -T "jacec@$SSH_HOST" << EOF
-            set -e
-
-            echo "WHOAMI:"
-            whoami
-
-            echo "HOME DIR:"
-            echo $HOME
-
-            echo "APP_DIR VALUE:"
-            echo "$APP_DIR"
-
-            echo "PWD BEFORE CD:"
-            pwd
-
-            echo "TRYING TO CD INTO APP_DIR:"
-            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1;}      
-
-            echo "PWD AFTER CD:"
-            pwd
-
-            echo "LISTING DIRECTORY CONTENTS:"
-            ls -la
-
-            git pull
-            npm ci
-
-            pm2 delete "$PM2_NAME" || true
-            pm2 start -f app.mjs --name "$PM2_NAME"
-            pm2 save
+         echo "Listing ~/.ssh:"
+         ls -la ~/.ssh
+         echo "Key file size:"
+         wc -c ~/.ssh/aaa-deploy-key || echo "Key file missing"
 ```
+## Debug Case Study
+This code runs after every push to any branch making it a lightweight, but effective way to overall verify that:
 
-# Initial Problem
-This file was only successful a calculated 8% of total deployments. With its simple structure, it was hard troubleshooting to figure out the root cause of this issue. 
+* Secrets are being injected correctly
+* Files are created in expected locations
+* The SSH key is non-empty and accessible
+
+ It isolates environmental issues before attempting an SSH connection, which makes diagnosing CI/CD failures significantly faster. 
+
+## Target Problems
+1. Directory Inspection:
+```
+ls -la ~/.ssh
+``` 
+* Confirms whether the .ssh directory exists
+* Shows all files inside it
+* Verifies that aaa-deploy-key was actually created
+* Reveals file permissions (critical for SSH)
+
+2. File Existence + Integrity Check
+```
+wc -c ~/.ssh/aaa-deploy-key
+```
+* Outputs the file size in bytes
+* Helps determine if the key is: Empty (0 bytes → likely secret injection failure), too small (truncated key), or reasonable size (valid private key)
+
+3. Failure Handling
+```
+|| echo "Key file missing"
+```
+* Prevents the workflow from crashing at this step
+* Provides a clear, human-readable error message instead
+### CI/CD Issues This Uncovers:
+* Secret not injected
+* Wrong file path
+* Key improperly written (newline issues)
+* Permissions incorrecct
+* Overwritten or truncated key 
+
+### Limitations:
+* Does not validate key format (e.g., corrupted PEM structure)
+* Does not test SSH connectivity
+* Does not confirm correct permissions (beyond visibility)
