@@ -119,16 +119,16 @@ The following **10 capability boxes** have been selected to extend the applicati
 - **CSS** – simple and clean styling  
 
 ### Backend
-- **Node.js + Express** – REST API for handling workout generation, user data, and integrations  
+- **Node.js + Fetch** – REST API for handling workout generation, user data, and integrations  
 
 ### Database
 - **Supabase** – stores users and saved workouts  
 
 ### Authentication
-- **JWT (JSON Web Tokens)** – secure login and session handling  
+- **Supabase** – secure login and session handling  
 
 ### Integrations
-- **External API** – for exercise or fitness-related data  
+- **External Json** – for exercise or fitness-related data  
 
 ### Testing & Debugging
 - Basic testing and documented debugging process  
@@ -138,5 +138,5 @@ The following **10 capability boxes** have been selected to extend the applicati
 - **GitHub Actions** – CI/CD automation  
 
 ### Collaboration & Workflow
-- **GitHub Issues & Projects** – product backlog and task tracking  
+- **GitHub Milestones** – task dashboard  
 - **Pull Requests** – structured code review process  
