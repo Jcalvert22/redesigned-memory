@@ -63,10 +63,6 @@ This guide outlines the steps to deploy the All-Around Athlete web application t
    sudo npm install -g pm2
    ```
 
-5. **Install Git:**
-   ```
-   sudo apt install git -y
-   ```
 
 ## Step 3: Deploy the Application
 
@@ -98,10 +94,7 @@ This guide outlines the steps to deploy the All-Around Athlete web application t
    - Follow the instructions from `pm2 startup` to enable PM2 to start on boot.
 
 5. **Configure firewall:**
-   - Ensure port 80 is open (for HTTP traffic):
-     ```
-     sudo ufw allow 80
-     ```
+   - Ensure port 80 is open (for HTTP traffic) on google cloud edit settings.
 
 ## Step 3.5: Set Up Reverse Proxy with Nginx
 
@@ -175,9 +168,9 @@ The repository includes a GitHub Actions workflow (`.github/workflows/deploy-mai
 1. **Generate SSH keys for GitHub:**
    - On your local machine:
      ```
-     ssh-keygen -t rsa -b 4096 -C "github-actions"
+     ssh-keygen -t ed25519
      ```
-   - Add the public key to your VM's `~/.ssh/authorized_keys`.
+   - Add the public key to your VM's ssh keys in google cloud settings.
 
 2. **Add secrets to GitHub repository:**
    - Go to your GitHub repo > Settings > Secrets and variables > Actions.
