@@ -15,7 +15,7 @@ Users will be able to select:
 - A target muscle group (e.g., chest, legs, back)
 - Available equipment (e.g., dumbbells, bodyweight, machines)
 
-The application will generate a **3-exercise workout routine** tailored to those inputs. Users can save workouts, view them later, and manage their personal workout collection.
+The application will generate a **3-exercise workout routine** tailored to those inputs. Users can save exercises, view them later, and manage their personal exercise collection.
 
 The app will also include additional integrations and features to enhance usability, reliability, and overall user experience.
 
@@ -35,7 +35,7 @@ The app will also include additional integrations and features to enhance usabil
 - User authentication (signup/login)
 - Select muscle group and available equipment
 - Generate a 3-exercise workout
-- Save workouts to user account
+- Save exercises to user account
 - View saved exercises
 - Delete exercises
 
@@ -47,46 +47,68 @@ The following **10 capability boxes** have been selected to extend the applicati
 
 ### 🔹 Development & Architecture
 1. **Authentication System (Login System)**  
-   - Implement secure user authentication using JWT  
+   - Implement secure user authentication
+     ```https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/auth/users?filter=id```  
 
 2. **Database Upgrade (Supabase)**  
    - Use Supabase for database management and storage  
-
+   ```https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/database/schemas```
 ---
 
 ### 🔹 Product & User Experience
 3. **UI/UX Design Improvement (Clean Navigation)**  
-   - Design an intuitive and user-friendly interface with clear navigation  
+   - Design an intuitive and user-friendly interface with clear navigation
+   ```
+   <nav class="main-nav" aria-label="Primary navigation">
+        <a href="#" class="active">Workout Generator</a>
+        <a href="exercises.html">Manage Exercises</a>
+        <a href="search.html">Search</a>
+        <a href="feedback.html">Feedback</a>
+        <a href="login.html">Login / Register</a>
+      </nav>
+   ```
 
 4. **Search Functionality (Muscle Groups)**  
-   - Implement a search bar to filter/select muscle groups  
+   - Implement a search bar to filter/select muscle groups
+     ``` https://github.com/Jcalvert22/redesigned-memory/blob/main/search.html ``` 
 
 5. **User Feedback System**  
-   - Allow users to submit feedback and store it  
+   - Allow users to submit feedback and store it
+     ``` https://github.com/Jcalvert22/redesigned-memory/blob/main/feedback.html ```
 
 ---
 
 ### 🔹 Integration & Features
 6. **API Integration**  
-   - Integrate an external fitness/exercise API  
+   - Integrate an external fitness/exercise API
+     ```
+     try {
+      const res  = await fetch('https://raw.githubusercontent.com/Jcalvert22/congenial-train-app-server/main/public/data/exercises.json');
+      const raw  = await res.json();
+      const flat = [];
+     ```
 
 ---
 
 ### 🔹 Testing & Reliability
 7. **Debug Case Study**  
-   - Document a major bug encountered and how it was resolved  
+   - Document a major bug encountered and how it was resolved
+     ``` https://github.com/Jcalvert22/redesigned-memory/blob/main/docs/debug_case_study.md ```
 
 ---
 
 ### 🔹 DevOps & Infrastructure
 8. **Monitoring & Logging**  
-   - Log requests, errors, and important backend events  
+   - Log requests, errors, and important backend events
+     ``` https://github.com/Jcalvert22/redesigned-memory/blob/main/setup-netdata.sh ```
 
 9. **Automation (CI/CD)**  
-   - Set up automated workflows (e.g., GitHub Actions) for testing or deployment  
+   - Set up automated workflows (e.g., GitHub Actions) for testing or deployment
+     ``` https://github.com/Jcalvert22/redesigned-memory/actions/runs/24848723761 ```
 
 10. **Deployment Guide (GCP Setup)**  
-   - Provide a step-by-step guide for deploying the app using Google Cloud Platform  
+   - Provide a step-by-step guide for deploying the app using Google Cloud Platform
+     ``` https://github.com/Jcalvert22/redesigned-memory/blob/main/docs/deploymentGuide.md ```
 
 ---
 
