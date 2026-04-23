@@ -36,8 +36,8 @@ The app will also include additional integrations and features to enhance usabil
 - Select muscle group and available equipment
 - Generate a 3-exercise workout
 - Save workouts to user account
-- View saved workouts
-- Delete workouts
+- View saved exercises
+- Delete exercises
 
 ---
 
