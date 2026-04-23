@@ -55,7 +55,7 @@ jobs:
             git pull
             npm ci
 
-            pm2 delete "$PM2_NAME" || true
+            pm2 kill || true
             pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
           '
