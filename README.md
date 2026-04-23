@@ -52,7 +52,7 @@ The following **10 capability boxes** have been selected to extend the applicati
 
 2. **Database Upgrade (Supabase)**  
    - Use Supabase for database management and storage  
-   ```https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/database/schemas```
+      https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/database/schemas
 ---
 
 ### 🔹 Product & User Experience
