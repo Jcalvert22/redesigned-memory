@@ -5,7 +5,7 @@
 * [Carly Copley](https://github.com/carlycopley)
 * [Gunnar Schmidt](https://github.com/Gunnar-Schmidtt/)
 
-# 🏋️ Workout Generator App (Proposal) 12345678910
+# 🏋️ Workout Generator App (Proposal)
 [Link to app](http://34.16.191.24/)
 
 ## 💡 App Idea
