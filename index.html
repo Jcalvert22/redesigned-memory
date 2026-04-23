@@ -40,44 +40,119 @@
     <section class="workout-section">
       <div class="container">
         <h1>Generate Your Workout</h1>
+        <p class="workout-hint">Select muscle groups, then hit Generate.</p>
+
+        <div class="muscle-groups" id="muscle-groups">
+          <span class="search-empty">Loading…</span>
+        </div>
+
         <button id="generate-btn">Generate Workout</button>
+
+        <p class="search-empty" id="status-msg" style="display:none"></p>
         <section id="workout"></section>
       </div>
     </section>
   </main>
   <script type="module">
-    async function getExercises() {
-      const res = await fetch('https://raw.githubusercontent.com/Jcalvert22/congenial-train-app-server/main/public/data/exercises.json');
-      return res.json();
+    const DATA_URL = 'https://raw.githubusercontent.com/Jcalvert22/congenial-train-app-server/main/public/data/exercises.json';
+
+    let allExercises = [];
+
+    async function loadExercises() {
+      const res = await fetch(DATA_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const flat = [];
+      for (const [group, list] of Object.entries(data.exercises ?? {})) {
+        if (!Array.isArray(list)) continue;
+        for (const ex of list) {
+          flat.push({
+            name:        ex.name        ?? '',
+            muscleGroup: ex.primary_muscle ?? group,
+            equipment:   ex.equipment   ?? '',
+            description: ex.description ?? ''
+          });
+        }
+      }
+      return flat;
     }
 
-    function pickRandom(arr, min, max) {
-      const count = Math.floor(Math.random() * (max - min + 1)) + min;
-      const copy = [...arr];
-      const result = [];
-      for (let i = 0; i < count && copy.length; i++) {
-        const idx = Math.floor(Math.random() * copy.length);
-        result.push(copy.splice(idx, 1)[0]);
-      }
-      return result;
+    function buildCheckboxes(exercises) {
+      const groups = [...new Set(exercises.map(ex => ex.muscleGroup))].sort();
+      document.getElementById('muscle-groups').innerHTML = groups.map(g => `
+        <label class="muscle-pill">
+          <input type="checkbox" name="group" value="${escHtml(g)}"> ${escHtml(g)}
+        </label>`).join('');
+    }
+
+    function getSelectedGroups() {
+      return [...document.querySelectorAll('input[name="group"]:checked')].map(el => el.value);
+    }
+
+    function getRandomExerciseForGroup(muscleGroup, exercises) {
+      const pool = exercises.filter(ex => ex.muscleGroup === muscleGroup);
+      return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
     }
 
     function renderWorkout(exercises) {
-      const section = document.getElementById('workout');
-      section.innerHTML = '';
-      exercises.forEach(ex => {
-        const div = document.createElement('div');
-        div.className = 'exercise';
-        div.innerHTML = `<strong>${ex.name}</strong> <br><em>${ex.muscleGroup}</em><br>${ex.description}`;
-        section.appendChild(div);
-      });
+      document.getElementById('workout').innerHTML = exercises.map(ex => `
+        <div class="exercise">
+          <strong>${escHtml(ex.name)}</strong>
+          <div class="exercise-tags">
+            <span class="ex-tag">${escHtml(ex.muscleGroup)}</span>
+            ${ex.equipment ? `<span class="ex-tag ex-tag--secondary">${escHtml(ex.equipment)}</span>` : ''}
+          </div>
+          <p>${escHtml(ex.description)}</p>
+        </div>`).join('');
+    }
+
+    function escHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function setStatus(msg) {
+      const el = document.getElementById('status-msg');
+      el.textContent    = msg;
+      el.style.display  = msg ? '' : 'none';
     }
 
     document.getElementById('generate-btn').addEventListener('click', async () => {
-      const exercises = await getExercises();
-      const workout = pickRandom(exercises, 4, 6);
-      renderWorkout(workout);
+      const selected = getSelectedGroups();
+      if (!selected.length) { setStatus('Select at least one muscle group.'); return; }
+
+      setStatus('');
+      const btn = document.getElementById('generate-btn');
+      btn.disabled    = true;
+      btn.textContent = 'Loading…';
+
+      try {
+        if (!allExercises.length) allExercises = await loadExercises();
+
+        const workout = [];
+        const missing = [];
+        for (const group of selected) {
+          const ex = getRandomExerciseForGroup(group, allExercises);
+          ex ? workout.push(ex) : missing.push(group);
+        }
+
+        renderWorkout(workout);
+        if (missing.length) setStatus(`No exercises found for: ${missing.join(', ')}`);
+      } catch (err) {
+        setStatus('Failed to load exercises. Check your connection and try again.');
+        console.error(err);
+      } finally {
+        btn.disabled    = false;
+        btn.textContent = 'Generate Workout';
+      }
     });
+
+    // Populate checkboxes on load
+    loadExercises().then(exercises => {
+      allExercises = exercises;
+      buildCheckboxes(exercises);
+    }).catch(() => setStatus('Failed to load exercise data.'));
   </script>
 </body>
 </html>

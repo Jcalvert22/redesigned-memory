@@ -201,6 +201,79 @@ button#generate-btn:hover {
   font-style: normal;
 }
 
+/* ── Workout generator ── */
+.workout-hint {
+  margin: 0 0 1rem;
+  font-size: 0.93rem;
+  color: #6b7280;
+}
+
+.muscle-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.muscle-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.muscle-pill:hover {
+  background: #e2e8f0;
+}
+
+.muscle-pill:has(input:checked) {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.muscle-pill input[type="checkbox"] {
+  display: none;
+}
+
+.exercise-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.4rem 0 0.6rem;
+}
+
+.ex-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #111;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+.ex-tag--secondary {
+  background: #6b7280;
+}
+
+.exercise p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.55;
+}
+
 @media (max-width: 860px) {
   .header-inner {
     flex-direction: column;
