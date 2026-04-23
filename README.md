@@ -5,7 +5,7 @@
 * [Carly Copley](https://github.com/carlycopley)
 * [Gunnar Schmidt](https://github.com/Gunnar-Schmidtt/)
 
-# 🏋️ Workout Generator App (Proposal) 123456789
+# 🏋️ Workout Generator App (Proposal) 12345678910
 
 ## 💡 App Idea
 This project is a beginner-friendly full-stack web application that helps users quickly generate simple workouts based on their preferences.
