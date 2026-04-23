@@ -48,11 +48,11 @@ The following **10 capability boxes** have been selected to extend the applicati
 ### 🔹 Development & Architecture
 1. **Authentication System (Login System)**  
    - Implement secure user authentication
-     https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/auth/users?filter=id 
+    - https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/auth/users?filter=id 
 
 2. **Database Upgrade (Supabase)**  
    - Use Supabase for database management and storage  
-      https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/database/schemas
+     - https://supabase.com/dashboard/project/itledwbcorbmpeogbtgn/database/schemas
 ---
 
 ### 🔹 Product & User Experience
@@ -70,11 +70,11 @@ The following **10 capability boxes** have been selected to extend the applicati
 
 4. **Search Functionality (Muscle Groups)**  
    - Implement a search bar to filter/select muscle groups
-     https://github.com/Jcalvert22/redesigned-memory/blob/main/search.html
+    - https://github.com/Jcalvert22/redesigned-memory/blob/main/search.html
 
 5. **User Feedback System**  
    - Allow users to submit feedback and store it
-      https://github.com/Jcalvert22/redesigned-memory/blob/main/feedback.html
+     - https://github.com/Jcalvert22/redesigned-memory/blob/main/feedback.html
 
 ---
 
@@ -93,22 +93,22 @@ The following **10 capability boxes** have been selected to extend the applicati
 ### 🔹 Testing & Reliability
 7. **Debug Case Study**  
    - Document a major bug encountered and how it was resolved
-      https://github.com/Jcalvert22/redesigned-memory/blob/main/docs/debug_case_study.md
+     - https://github.com/Jcalvert22/redesigned-memory/blob/main/docs/debug_case_study.md
 
 ---
 
 ### 🔹 DevOps & Infrastructure
 8. **Monitoring & Logging**  
    - Log requests, errors, and important backend events
-     http://34.16.191.24:19999/#metrics_correlation=false&after=-900&before=0&modal=&modalTab=
+    - http://34.16.191.24:19999/#metrics_correlation=false&after=-900&before=0&modal=&modalTab=
 
 9. **Automation (CI/CD)**  
    - Set up automated workflows (e.g., GitHub Actions) for testing or deployment
-      https://github.com/Jcalvert22/redesigned-memory/actions/runs/24848723761 
+    -  https://github.com/Jcalvert22/redesigned-memory/actions/runs/24848723761 
 
 10. **Deployment Guide (GCP Setup)**  
    - Provide a step-by-step guide for deploying the app using Google Cloud Platform
-       https://github.com/Jcalvert22/redesigned-memory/blob/main/docs/deploymentGuide.md
+     -  https://github.com/Jcalvert22/redesigned-memory/blob/main/docs/deploymentGuide.md
 
 ---
 
