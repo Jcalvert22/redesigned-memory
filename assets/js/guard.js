@@ -20,8 +20,9 @@ if (!session) {
   window.location.href =
     'login.html?msg=' + encodeURIComponent('You must login before making changes.');
 } else {
-  // Cache the username for use by the nav (read synchronously on each page)
-  if (!sessionStorage.getItem('aa_username')) {
+  let username = sessionStorage.getItem('aa_username');
+
+  if (!username) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('username')
@@ -29,9 +30,13 @@ if (!session) {
       .single();
 
     if (profile?.username) {
-      sessionStorage.setItem('aa_username', profile.username);
+      username = profile.username;
+      sessionStorage.setItem('aa_username', username);
     }
   }
+
+  const navUser = document.getElementById('nav-user');
+  if (navUser) navUser.textContent = 'Hi, ' + (username || 'User') + ' | ';
 
   // Expose logout globally so inline onclick handlers work
   window.logout = async () => {

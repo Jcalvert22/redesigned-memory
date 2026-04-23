@@ -14,16 +14,19 @@ CREATE TABLE IF NOT EXISTS profiles (
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
 -- Own-row read/write policies
-CREATE POLICY IF NOT EXISTS "Users can read their own profile"
+DROP POLICY IF EXISTS "Users can read their own profile" ON profiles;
+CREATE POLICY "Users can read their own profile"
   ON profiles FOR SELECT
   USING (auth.uid() = user_id);
 
-CREATE POLICY IF NOT EXISTS "Users can update their own profile"
+DROP POLICY IF EXISTS "Users can update their own profile" ON profiles;
+CREATE POLICY "Users can update their own profile"
   ON profiles FOR UPDATE
   USING (auth.uid() = user_id);
 
 -- Required for username→email lookup at login time (user is not yet authenticated).
-CREATE POLICY IF NOT EXISTS "Anyone can look up email by username"
+DROP POLICY IF EXISTS "Anyone can look up email by username" ON profiles;
+CREATE POLICY "Anyone can look up email by username"
   ON profiles FOR SELECT
   USING (true);
 
@@ -46,7 +49,7 @@ BEGIN
     NEW.raw_user_meta_data->>'username',
     NEW.email
   )
-  ON CONFLICT (user_id) DO NOTHING;
+  ON CONFLICT DO NOTHING;
   RETURN NEW;
 END;
 $$;
