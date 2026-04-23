@@ -44,7 +44,7 @@ jobs:
             pwd
 
             echo "TRYING TO CD INTO APP_DIR:"
-            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1; }
+            cd /home/jacecalvert04/redesigned-memory || { echo "FAILED TO CD INTO $APP_DIR"; exit 1; }
 
             echo "PWD AFTER CD:"
             pwd
