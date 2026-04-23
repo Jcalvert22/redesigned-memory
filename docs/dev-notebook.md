@@ -31,4 +31,5 @@
 - The workflow kept failing during the run.
 - We identified the cause as SSH public key permission issues.
 - We initially assumed the YAML configuration was the problem and tried several versions.
-- The true fix was generating a new SSH key pair and updating the GitHub Actions secrets, which allowed the deployment workflow to succeed.
+- The true fix was generating a new SSH key pair and updating the GitHub Actions secrets.
+- This then led to an issue where github could not cd into the right directory, which was fixed by hardcoding the directory into the yml file.
