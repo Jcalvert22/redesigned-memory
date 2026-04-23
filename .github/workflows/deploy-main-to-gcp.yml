@@ -28,7 +28,7 @@ jobs:
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/.ssh/final-key -T "jacecalvert04@$SSH_HOST" << EOF
+          ssh -i ~/.ssh/final-key -T "$SSH_USER@$SSH_HOST" bash -c '
             set -e
 
             echo "WHOAMI:"
@@ -44,7 +44,7 @@ jobs:
             pwd
 
             echo "TRYING TO CD INTO APP_DIR:"
-            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1;}      
+            cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1; }
 
             echo "PWD AFTER CD:"
             pwd
@@ -58,4 +58,4 @@ jobs:
             pm2 delete "$PM2_NAME" || true
             pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
-          EOF
+          '
