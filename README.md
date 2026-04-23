@@ -6,6 +6,7 @@
 * [Gunnar Schmidt](https://github.com/Gunnar-Schmidtt/)
 
 # 🏋️ Workout Generator App (Proposal) 12345678910
+[Link to app](http://34.16.191.24/)
 
 ## 💡 App Idea
 This project is a beginner-friendly full-stack web application that helps users quickly generate simple workouts based on their preferences.
