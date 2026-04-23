@@ -5,59 +5,46 @@
 const DB = {
   _key: 'aa_exercises',
 
-  // Call this once on any CRUD page before reading data
+  // Seeds localStorage on the very first visit only.
+  // Skips if data already exists so user-created exercises are never overwritten.
   async init() {
+    if (localStorage.getItem(this._key)) return;
+
     try {
       const res  = await fetch('https://raw.githubusercontent.com/Jcalvert22/congenial-train-app-server/main/public/data/exercises.json');
-      let data = await res.json();
-      console.log('Raw GitHub data:', data);
-      
-      // Extract exercises from the nested structure and flatten
-      if (data.exercises && typeof data.exercises === 'object') {
-        const flatExercises = [];
-        for (const muscleGroup in data.exercises) {
-          const exercises = data.exercises[muscleGroup];
-          if (Array.isArray(exercises)) {
-            exercises.forEach((ex, index) => {
-              // Map GitHub properties to our expected format
-              flatExercises.push({
-                id: index,
-                name: ex.name,
-                muscleGroup: ex.primary_muscle,
-                description: ex.description
-              });
-            });
+      const raw  = await res.json();
+      const flat = [];
+
+      if (raw.exercises && typeof raw.exercises === 'object') {
+        for (const group in raw.exercises) {
+          const list = raw.exercises[group];
+          if (Array.isArray(list)) {
+            list.forEach((ex, i) => flat.push({
+              id:          i + '_' + group,
+              name:        ex.name,
+              muscleGroup: ex.primary_muscle,
+              description: ex.description
+            }));
           }
         }
-        data = flatExercises;
       }
-      
-      console.log('Processed data to store:', data);
-      
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('Could not parse exercises data');
-      }
-      
-      localStorage.setItem(this._key, JSON.stringify(data));
-    } catch (error) {
-      console.error('Failed to fetch exercises from GitHub:', error);
-      // Fallback: inline seed (works when opened directly as a file)
+
+      if (!flat.length) throw new Error('Empty exercise data');
+      localStorage.setItem(this._key, JSON.stringify(flat));
+    } catch {
       const seed = [
-        { id: 1, name: 'Bodyweight Squat',  muscleGroup: 'Legs',   description: 'A simple squat using only bodyweight.' },
-        { id: 2, name: 'Glute Bridge',       muscleGroup: 'Glutes', description: 'Lift hips upward while lying on your back.' },
-        { id: 3, name: 'Push-Up (Knee)',     muscleGroup: 'Chest',  description: 'Beginner push-up variation using knees for support.' },
-        { id: 4, name: 'Dead Bug',           muscleGroup: 'Core',   description: 'Opposite arm/leg extension while stabilizing core.' },
-        { id: 5, name: 'Reverse Lunge',      muscleGroup: 'Legs',   description: 'Step backward into a lunge, alternating legs.' }
+        { id: 1, name: 'Bodyweight Squat', muscleGroup: 'Legs',   description: 'A simple squat using only bodyweight.' },
+        { id: 2, name: 'Glute Bridge',     muscleGroup: 'Glutes', description: 'Lift hips upward while lying on your back.' },
+        { id: 3, name: 'Push-Up (Knee)',   muscleGroup: 'Chest',  description: 'Beginner push-up variation using knees for support.' },
+        { id: 4, name: 'Dead Bug',         muscleGroup: 'Core',   description: 'Opposite arm/leg extension while stabilizing core.' },
+        { id: 5, name: 'Reverse Lunge',    muscleGroup: 'Legs',   description: 'Step backward into a lunge, alternating legs.' }
       ];
-      console.log('Using fallback seed data');
       localStorage.setItem(this._key, JSON.stringify(seed));
     }
   },
 
   getAll() {
-    const data = JSON.parse(localStorage.getItem(this._key) || '[]');
-    console.log('getAll() returning:', data);
-    return data;
+    return JSON.parse(localStorage.getItem(this._key) || '[]');
   },
 
   getById(id) {
