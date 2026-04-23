@@ -16,7 +16,7 @@ This guide outlines the steps to deploy the All-Around Athlete web application t
    - Choose a name for your VM (e.g., `athlete-app-vm`).
    - Select a region and zone close to your users.
    - Choose an appropriate machine type (e.g., e2-micro for testing, or e2-medium for production).
-   - Under "Boot disk", select Ubuntu 20.04 LTS or later.
+   - Under "Boot disk", select Ubuntu 18
    - Allow HTTP and HTTPS traffic in the "Firewall" section.
    - Click "Create".
 
@@ -30,7 +30,7 @@ This guide outlines the steps to deploy the All-Around Athlete web application t
    - Click "Edit" and ensure "Block project-wide SSH keys" is unchecked.
    - Generate an SSH key pair locally if you don't have one:
      ```
-     ssh-keygen -t rsa -b 4096 -C "your-email@example.com"
+     ssh-keygen -t ed25519
      ```
    - Add your public key to the VM's metadata or use the SSH button in the console.
 
@@ -81,7 +81,6 @@ This guide outlines the steps to deploy the All-Around Athlete web application t
      ```
      export SUPABASE_URL="your-supabase-project-url"
      export SUPABASE_ANON_KEY="your-supabase-anon-key"
-     export PORT=3000
      ```
    - For production, consider using a more secure method like environment variables in systemd or PM2 ecosystem file.
 
