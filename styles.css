@@ -274,6 +274,60 @@ button#generate-btn:hover {
   line-height: 1.55;
 }
 
+.count-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+  font-size: 0.93rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.count-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.count-stepper button {
+  background: #f1f5f9;
+  border: none;
+  width: 34px;
+  height: 34px;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #111;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.count-stepper button:hover { background: #e2e8f0; }
+
+.count-stepper input[type="number"] {
+  width: 44px;
+  border: none;
+  border-left: 1.5px solid #e2e8f0;
+  border-right: 1.5px solid #e2e8f0;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111;
+  padding: 0;
+  height: 34px;
+  -moz-appearance: textfield;
+}
+
+.count-stepper input[type="number"]::-webkit-inner-spin-button,
+.count-stepper input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
 @media (max-width: 860px) {
   .header-inner {
     flex-direction: column;
