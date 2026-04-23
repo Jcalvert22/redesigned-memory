@@ -15,16 +15,11 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/aaa-deploy-key
-          chmod 600 ~/.ssh/aaa-deploy-key
-          printf 'Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile /dev/null\n' > ~/.ssh/config
-          chmod 600 ~/.ssh/config
-      - name: Debug SSH key
-        run: |
-         echo "Listing ~/.ssh:"
-         ls -la ~/.ssh
-         echo "Key file size:"
-         wc -c ~/.ssh/aaa-deploy-key || echo "Key file missing"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/final-key
+          chmod 600 ~/.ssh/final-key
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts        
+          chmod 644 ~/.ssh/known_hosts
+
       - name: Deploy over SSH
         shell: bash
         env:
@@ -33,27 +28,33 @@ jobs:
           APP_DIR: /home/jacecalvert04/redesigned-memory
           PM2_NAME: ${{ vars.PM2_NAME }}
         run: |
-          ssh -i ~/.ssh/aaa-deploy-key \
-            -o BatchMode=yes \
-            -o ConnectTimeout=30 \
-            "$SSH_USER@$SSH_HOST" 'bash -s' << EOF
+          ssh -i ~/.ssh/final-key -T "jacecalvert04@$SSH_HOST" << EOF
             set -e
+
             echo "WHOAMI:"
             whoami
+
             echo "HOME DIR:"
             echo $HOME
+
             echo "APP_DIR VALUE:"
             echo "$APP_DIR"
+
             echo "PWD BEFORE CD:"
             pwd
+
             echo "TRYING TO CD INTO APP_DIR:"
             cd "$APP_DIR" || { echo "FAILED TO CD INTO $APP_DIR"; exit 1;}      
+
             echo "PWD AFTER CD:"
             pwd
+
             echo "LISTING DIRECTORY CONTENTS:"
             ls -la
+
             git pull
             npm ci
+
             pm2 delete "$PM2_NAME" || true
             pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
