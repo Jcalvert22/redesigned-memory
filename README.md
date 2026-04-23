@@ -45,6 +45,19 @@ The app will also include additional integrations and features to enhance usabil
 
 The following **10 capability boxes** have been selected to extend the application:
 
+| Component | Capability | Link | Explanation |
+|-----------|------------|------|-------------|
+| Authenticaiton System | Added supabase capability for authentication | Blank for now | Adding supabase was easy we just implemented the ANON key into our .env on our vm and it was seamless from there |
+| Database Upgrade | The Supabase implementation doubles as a database for storing the different username and passwords they are hashed so the owner of the database cannot get any passwords | Blank | Being able to store the username and passwords help registering and signing in faster and more effecience |
+| Ui/Ux Overhaul | We chagned the style of this app to make it look more professional | Blank | We wanted to make it look modern without overwhelming |
+| Search funcitonality | Implemented a search bar to filter/select muscle groups | Blank | We wanted to add this funcitonality to make it easier to see what exercises are in the app or what needs to be added |
+| User feedback System | This is an area on the bar where people can leave reviews of the app | Blank | This helps people see what people think about the app |
+| API Integration | We pulled an API for the exercises from a different website so we can add many different exercises without adding them manually | Blank | This implemented all of the exercises into an organized list |
+| Debug Case Study | We kept running into problems with our Ci/Cd file | Blank | The problem was ownership issues in the vm itself |
+| Monitoring and Logging | Implemented with NetStat | Blank | This allows to see activity on the vm and how heavy it is running |
+| Automation Ci/Cd | Implemented so we did not have to manually pull everything on the repo | Blank | After we fixed the ownership issues this made it easiest to run |
+| Deployment Guide | These are the exact steps we used to start up our VM | Blank | The deployment guide will help if the vm becomes corrupted and we need to restart from scratch |
+
 ### 🔹 Development & Architecture
 1. **Authentication System (Login System)**  
    - Implement secure user authentication
