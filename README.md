@@ -57,7 +57,7 @@ The following **10 capability boxes** have been selected to extend the applicati
 | Debug Case Study | Debugging code we implemented in our yaml file. Performs directory inspections, file existence & integrity checks, and failure handling. | https://github.com/Jcalvert22/redesigned-memory/issues/8 |
 | Monitoring and Logging | Implemented with NetStat, this shows us what ports are open and what network connections our website is making. We also have logging enabled to be able to track network evens. | https://github.com/Jcalvert22/redesigned-memory/issues/9 |
 | Automation Ci/Cd | Implemented so we did not have to manually pull everything on the repo. Using this, we save so much time being able to push to our produciton site. | https://github.com/Jcalvert22/redesigned-memory/issues/10 |
-| Deployment Guide | These are the exact steps we used to start up our VM. We wanted to give the exact commands and steps, so if something went wront we could reset it and it not be as much of a problem. | https://github.com/Jcalvert22/redesigned-memory/issues/11 | 
+| Deployment Guide | These are the exact steps we used to start up our VM. We wanted to give the exact commands and steps so if something went wrong, we could reset it and it not be as much of a problem. | https://github.com/Jcalvert22/redesigned-memory/issues/11 | 
 
 ---
 
