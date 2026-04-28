@@ -42,6 +42,11 @@ The app will also include additional integrations and features to enhance usabil
 
 ---
 
+## ✅ What has improved
+- The original app only had a few exercises.
+- This app has randomness when it comes to workout generation so they feel new to avoid gym fatigue.
+- The original was confusing because you could not edit any of the exercises or view ones that the generator is being pulled from.
+
 ## 📦 Selected Capability Boxes (100 pts total)
 
 The following **10 capability boxes** have been selected to extend the application:
