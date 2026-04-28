@@ -9,7 +9,7 @@
 [Link to app](http://34.16.191.24/)
 
 ## 💡 App Idea
-As a new gym goer I want to be able to plan a workout without having to pay for a trainer that are tailored to absolute beginners that helps users quickly generate simple workouts based on their preferences.
+As a new gym goer with no plans to hire a trainer, I want to be able to plan a workout tailored for absolute beginners that helps users quickly generate simple workouts based on their preferences.
 
 Users will be able to select:
 - A target muscle group (e.g., chest, legs, back)
