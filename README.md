@@ -54,7 +54,7 @@ The following **10 capability boxes** have been selected to extend the applicati
 | User feedback System | This is an area on the bar where people can leave reviews of the app | https://github.com/Jcalvert22/redesigned-memory/issues/7#issue-4317978228 | This helps people see what people think about the app |
 | API Integration | We pulled an API for the exercises from a different website so we can add many different exercises without adding them manually | https://github.com/Jcalvert22/redesigned-memory/issues/4 | This implemented all of the exercises into an organized list |
 | Debug Case Study | We kept running into problems with our Ci/Cd file | https://github.com/Jcalvert22/redesigned-memory/issues/8#issue-4317989361 | The problem was ownership issues in the vm itself |
-| Monitoring and Logging | Implemented with NetStat | https://github.com/Jcalvert22/redesigned-memory/issues/9#issue-4317999874 | This allows to see activity on the vm and how heavy it is running |
+| Monitoring and Logging | Implemented with NetStat | https://github.com/Jcalvert22/redesigned-memory/issues/9 | This allows to see activity on the vm and how heavy it is running |
 | Automation Ci/Cd | Implemented so we did not have to manually pull everything on the repo | https://github.com/Jcalvert22/redesigned-memory/issues/10 | After we fixed the ownership issues this made it easiest to run |
 | Deployment Guide | These are the exact steps we used to start up our VM | https://github.com/Jcalvert22/redesigned-memory/issues/11 | The deployment guide will help if the vm becomes corrupted and we need to restart from scratch |
 
