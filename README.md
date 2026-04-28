@@ -11,7 +11,7 @@
 ## 💡 App Idea
 
 ## User Story:
-As a new gym goer with no plans to hire a trainer, I want to be able to plan a workout tailored for absolute beginners that helps users quickly generate simple workouts based on their preferences.
+- As a new gym goer with no plans to hire a trainer, I want to be able to plan a workout tailored for absolute beginners that helps users quickly generate simple workouts based on their preferences.
 
 Users will be able to select:
 - A target muscle group (e.g., chest, legs, back)
