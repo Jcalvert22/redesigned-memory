@@ -57,7 +57,7 @@ The app will also include additional integrations and features to enhance usabil
 The following **10 capability boxes** have been selected to extend the application:
 
 | Box | What We Did | Evidence | Notes |
-|-----------|------------|------|
+|-----------|------------|------|------|
 | Authenticaiton System | Added supabase capability for authentication. Using the ANON key and Website key when users sign up, it pings the website and private key to store the information and give user status back to the client. | https://github.com/Jcalvert22/redesigned-memory/issues/5  | After enforcing the use of Supabase, we implemented the ANON key into our .env on our vm to provide extra security.
 | Database Upgrade | The Supabase implementation doubles as a database for storing the different username and passwords they are hashed for security. We wanted to move away from MongoDB because using Supabase disaster recovery is as simple as plugging a SQL script into the database. | https://github.com/Jcalvert22/redesigned-memory/issues/5 |
 | Ui/Ux Overhaul | Upgrading app appearance with features such as a navbar with functional links. We also improved the overall look. We wanted to go for a more professional look that would be visually appealing for users. | https://github.com/Jcalvert22/redesigned-memory/issues/3 |
