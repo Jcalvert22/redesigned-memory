@@ -46,18 +46,18 @@ The app will also include additional integrations and features to enhance usabil
 
 The following **10 capability boxes** have been selected to extend the application:
 
-| Component | Capability | Link | Explanation |
-|-----------|------------|------|-------------|
-| Authenticaiton System | Added supabase capability for authentication | https://github.com/Jcalvert22/redesigned-memory/issues/5  | After enforcing the use of Supabase, we implemented the ANON key into our .env on our vm to provide extra security. |
-| Database Upgrade | The Supabase implementation doubles as a database for storing the different username and passwords they are hashed for security. This is a proven upgrade in comparison to the previous database, MongoDB. | https://github.com/Jcalvert22/redesigned-memory/issues/5 | Being able to store the username and passwords help registering and signing in faster and more effecience |
-| Ui/Ux Overhaul | Upgrading app appearance with features such as a navbar with functional links.  | https://github.com/Jcalvert22/redesigned-memory/issues/3 | We wanted to make it look modern without overwhelming |
-| Search funcitonality | Implemented a search bar, featured as a navbar link, to filter/select muscle groups. | https://github.com/Jcalvert22/redesigned-memory/issues/6 | We wanted to add this funcitonality to make it easier to see what exercises are in the app or what needs to be added |
-| User feedback System | A rating feature that includes a uers's name, a rating out of 5 stars, and a description. Existing ratings can be sorted and filtered by age and number of stars. | https://github.com/Jcalvert22/redesigned-memory/issues/7 | This helps people see what people think about the app |
-| API Integration | We pulled an API for the exercises from a different website so we can add many different exercises without adding them manually | https://github.com/Jcalvert22/redesigned-memory/issues/4 | This implemented all of the exercises into an organized list |
-| Debug Case Study | Debugging code we implemented in our yaml file. Performs directory inspections, file existence & integrity checks, and failure handling. | https://github.com/Jcalvert22/redesigned-memory/issues/8 | The problem was ownership issues in the vm itself |
-| Monitoring and Logging | Implemented with NetStat | https://github.com/Jcalvert22/redesigned-memory/issues/9 | This allows to see activity on the vm and how heavy it is running |
-| Automation Ci/Cd | Implemented so we did not have to manually pull everything on the repo | https://github.com/Jcalvert22/redesigned-memory/issues/10 | After we fixed the ownership issues this made it easiest to run |
-| Deployment Guide | These are the exact steps we used to start up our VM | https://github.com/Jcalvert22/redesigned-memory/issues/11 | The deployment guide will help if the vm becomes corrupted and we need to restart from scratch |
+| Component | Capability | Link |
+|-----------|------------|------|
+| Authenticaiton System | Added supabase capability for authentication. Using the ANON key and Website key when users sign up, it pings the website and private key to store the information and give user status back to the client. | https://github.com/Jcalvert22/redesigned-memory/issues/5  | After enforcing the use of Supabase, we implemented the ANON key into our .env on our vm to provide extra security.
+| Database Upgrade | The Supabase implementation doubles as a database for storing the different username and passwords they are hashed for security. We wanted to move away from MongoDB because using Supabase disaster recovery is as simple as plugging a SQL script into the database. | https://github.com/Jcalvert22/redesigned-memory/issues/5 |
+| Ui/Ux Overhaul | Upgrading app appearance with features such as a navbar with functional links. We also improved the overall look. We wanted to go for a more professional look that would be visually appealing for users. | https://github.com/Jcalvert22/redesigned-memory/issues/3 |
+| Search funcitonality | Implemented a search bar, featured as a navbar link, to filter/select muscle groups. This is conviently linked near the add exercise button so you can see if an exercise is available, if its not add it in the same screen. | https://github.com/Jcalvert22/redesigned-memory/issues/6 |
+| User feedback System | A rating feature that includes a uers's name, a rating out of 5 stars, and a description. Existing ratings can be sorted and filtered by age and number of stars. | https://github.com/Jcalvert22/redesigned-memory/issues/7 |
+| API Integration | We pulled an API for the exercises from a different website so we can add many different exercises without adding them manually. We pulled from a database from a similar website to ours. | https://github.com/Jcalvert22/redesigned-memory/issues/4 |
+| Debug Case Study | Debugging code we implemented in our yaml file. Performs directory inspections, file existence & integrity checks, and failure handling. | https://github.com/Jcalvert22/redesigned-memory/issues/8 |
+| Monitoring and Logging | Implemented with NetStat, this shows us what ports are open and what network connections our website is making. We also have logging enabled to be able to track network evens. | https://github.com/Jcalvert22/redesigned-memory/issues/9 |
+| Automation Ci/Cd | Implemented so we did not have to manually pull everything on the repo. Using this, we save so much time being able to push to our produciton site. | https://github.com/Jcalvert22/redesigned-memory/issues/10 |
+| Deployment Guide | These are the exact steps we used to start up our VM. We wanted to give the exact commands and steps, so if something went wront we could reset it and it not be as much of a problem. | https://github.com/Jcalvert22/redesigned-memory/issues/11 | 
 
 ---
 
