@@ -9,13 +9,14 @@
 [Link to app](http://34.16.191.24/)
 
 ## 💡 App Idea
-This project is a beginner-friendly full-stack web application that helps users quickly generate simple workouts based on their preferences.
+As a new gym goer I want to be able to plan a workout without having to pay for a trainer that are tailored to absolute beginners that helps users quickly generate simple workouts based on their preferences.
 
 Users will be able to select:
 - A target muscle group (e.g., chest, legs, back)
 - Available equipment (e.g., dumbbells, bodyweight, machines)
+- How many movements they want to do
 
-The application will generate a **3-exercise workout routine** tailored to those inputs. Users can save exercises, view them later, and manage their personal exercise collection.
+The application will generate a workout tailored to those inputs. Users can save exercises, view them later, and manage their personal exercise collection.
 
 The app will also include additional integrations and features to enhance usability, reliability, and overall user experience.
 
@@ -34,8 +35,8 @@ The app will also include additional integrations and features to enhance usabil
 ### Core Features (MVP)
 - User authentication (signup/login)
 - Select muscle group and available equipment
-- Generate a 3-exercise workout
-- Save exercises to user account
+- Choose the amount of movements
+- Add exercises to user account
 - View saved exercises
 - Delete exercises
 
