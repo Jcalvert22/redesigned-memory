@@ -42,6 +42,8 @@ The app will also include additional integrations and features to enhance usabil
 
 ---
 
+## 💪 Our Value Proposition Statement: "Generate, Lift, Achieve." 
+
 ## ✅ What has improved
 - The original app provided limited exercises making it hard to create an elaborate workout. Also, the API we called from provided 117 exercises with the ablility to add more.
 - When it comes to workout generation, our app creates innovative, and fresh workouts to keep users from experiencing gym fatigue. 
