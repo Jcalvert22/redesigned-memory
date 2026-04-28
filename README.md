@@ -43,10 +43,10 @@ The app will also include additional integrations and features to enhance usabil
 ---
 
 ## ✅ What has improved
-- The original app only had a few exercises. The API we called from had 117 with the ablility to add exercises.
-- This app has randomness when it comes to workout generation so they feel new to avoid gym fatigue.
-- The original was confusing because you could not edit any of the exercises or view ones that the generator is being pulled from.
-- More organized with the muscle category, equipment, and ability to choose how many exercises you want.
+- The original app provided limited exercises making it hard to create an elaborate workout. In addition, the API we called from had 117 with the ablility to add exercises.
+- When it comes to workout generation, our app creates innovative, and fresh workouts to keep users from experiencing gym fatigue. 
+- The original app was confusing because users could not edit their exercises or view exercises that the generator is being pulled from.
+- The new and improved app provides more detailed organization and freedom to choose which muscle category, equipment, and number exercises desired.
 
 ---
 
